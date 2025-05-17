@@ -1,5 +1,4 @@
 #Grid Movement System
-#Reagan Noonan
 #2025-05-16
 
 import pygame
