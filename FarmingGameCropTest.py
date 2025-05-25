@@ -38,7 +38,7 @@ def crop_growth(x,y):
     print(crop)
     
     if crop == 'empty':
-        return None
+        return False
     
     if crop['mature'] == True:
         return False
@@ -51,4 +51,16 @@ def crop_growth(x,y):
     if crop['growth_stage'] == crop['max_stage']:
         crop['mature'] = True            
     
-    return True   
+    return True  
+
+while True:
+    plant_crop(2,1,'carrot')
+    
+    growth = crop_growth(2,1)
+    
+    time.sleep(0.1)
+    
+    if growth:
+        continue
+    else:
+        break 
