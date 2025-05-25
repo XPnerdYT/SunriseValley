@@ -26,7 +26,7 @@ def plant_crop(x,y,crop_type):
             'type' : crop_type,
             'growth_stage' : 0,
             'growth_timer' : 0,
-            'growth_stages': CROP_DATA[crop_type]['growth_stages'][:],
+            'growth_stages': CROP_DATA[crop_type]['growth_stages'],
             'max_stage': CROP_DATA[crop_type]['max_stage'],
             'mature': False
             }
