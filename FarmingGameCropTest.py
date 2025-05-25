@@ -30,7 +30,7 @@ def plant_crop(x,y,crop_type):
             'max_stage': CROP_DATA[crop_type]['max_stage'],
             'mature': False
             }
-        farming_grid[y][x] = crop_instance
+        farming_grid[y][x] = crop_grown
 
 def crop_growth(x,y):
     crop = farming_grid[y][x]
