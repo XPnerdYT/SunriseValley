@@ -11,7 +11,7 @@ for y in range(10):
 
 CROP_DATA = {
     'carrot': {
-        'growth_stages': [10,20,30],
+        'growth_stages': [100,200,300],
         'sell_price': 5,
         'seed_cost': 2,
         'display_name': 'carrot',
