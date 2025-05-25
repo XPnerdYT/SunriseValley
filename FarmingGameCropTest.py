@@ -20,9 +20,9 @@ CROP_DATA = {
         },
     }
 
-def plant_crop(x,y,crop_type,farming_grid):
+def plant_crop(x,y,crop_type):
     if farming_grid[y][x] == 'empty':
-        crop_instance = {
+        crop_grown = {
             'type' : crop_type,
             'growth_stage' : 0,
             'growth_timer' : 0,
@@ -31,17 +31,17 @@ def plant_crop(x,y,crop_type,farming_grid):
             'mature': False
             }
         farming_grid[y][x] = crop_instance
-    return farming_grid
 
-farming_grid = plant_crop(1,2,'carrot',farming_grid)
-
-for i in range(100):
-    crop = farming_grid[2][1]
+def crop_growth(x,y):
+    crop = farming_grid[y][x]
     
     print(crop)
     
+    if crop == 'empty':
+        return None
+    
     if crop['mature'] == True:
-        break    
+        return False
     
     if not crop['mature']:
         crop['growth_timer'] += 1
@@ -50,8 +50,5 @@ for i in range(100):
         
     if crop['growth_stage'] == crop['max_stage']:
         crop['mature'] = True            
-        
-    time.sleep(0.5)
     
-
-print("Ready for harvest!")
+    return True   
