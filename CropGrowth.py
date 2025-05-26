@@ -1,7 +1,7 @@
 #FarmingGame Crop Test
 #2025-05-24
 import time
-from cropdata import CROP_DATA
+from CropData import CROP_DATA
 
 farming_grid = []
 for y in range(10):
