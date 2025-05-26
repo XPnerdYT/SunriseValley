@@ -1,6 +1,7 @@
 #FarmingGame Crop Test
 #2025-05-24
 import time
+from cropdata import CROP_DATA
 
 farming_grid = []
 for y in range(10):
@@ -9,16 +10,6 @@ for y in range(10):
         farming_row.append('empty')
     farming_grid.append(farming_row)
 
-CROP_DATA = {
-    'carrot': {
-        'growth_stages': [100,200,300],
-        'sell_price': 5,
-        'seed_cost': 2,
-        'display_name': 'carrot',
-        'max_stage': 3,
-        'renewable': False,
-        },
-    }
 
 def plant_crop(x,y,crop_type):
     if farming_grid[y][x] == 'empty':
