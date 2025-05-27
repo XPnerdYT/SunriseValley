@@ -27,8 +27,11 @@ CROP_DATA = {
         'image_path': 'crop.png',
         },
     'blueberry': {
-        'growth_stages': [600,1200,1800,1920],
+        'growth_stages': [600,1200,1800,1900],
         'sell_price': 2,
         'seed_cost':10,
+        'display_name': 'blueberry',
+        'max_stage': 4,
+        'renewable': True,
         'image_path': 'crop.png',
     }
