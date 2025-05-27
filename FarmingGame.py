@@ -4,8 +4,6 @@
 import pygame
 
 pygame.init()
-size = (1200,900)
-screen = pygame.display.set_mode(size)
 
 GREEN = (100,245,0)
 DARKGREEN = (10,120,0)
