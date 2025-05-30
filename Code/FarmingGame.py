@@ -25,20 +25,28 @@ for y in range(10):
 for item in farming_grid:
     print(item)
 
+#DELETE LATER------
 clock = pygame.time.Clock()
 running = True
+#-----------------
 while running:
     screen.fill(BLACK)
     screen.blit(farmingBG,[0,0])
-    
+
     ##Hitboxes for planting crops in the farming grid
     for y in range(len(farming_grid)):
         for x in range(len(farming_grid)):
             pygame.draw.rect(screen,RED,[116+75*x-5*y,341+y*40-5*x,72,37],1)
-    
+    if pygame.mouse.get_pressed()[0]:
+        mouseX, mouseY = pygame.mouse.get_pos()
+        pygame.draw.rect(screen,RED,[mouseX,mouseY,10,10],1)   
+        
+#DELETE LATER----- 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            running = False          
+            
     pygame.display.flip()
     clock.tick(60)
 pygame.quit()
+#-----------------
