@@ -50,7 +50,7 @@ while True:
     
     growth = crop_growth(2,1)
     
-    time.sleep(0.0167)
+    time.sleep(0.02)
     
     if growth:
         continue
