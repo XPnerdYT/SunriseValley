@@ -1,6 +1,6 @@
-#Farming Game
+#Test Run
 #Reagan
-#2025-05-23
+#2025-05-30
 
 import pygame
 import time
@@ -83,15 +83,15 @@ def crop_growth(x,y):
     
     return True  
 
-##Colours
+#Colours
 BLACK = (0,0,0)
 RED = (255,0,0)
 
-##Images
+#Images
 farmingBG = pygame.image.load('FarmingBackground.png')
 farmingBG = pygame.transform.scale(farmingBG,[1200,800])
 
-##Creating the farming grid's stored data
+#Creating the farming grid's stored data
 farming_grid = []
 for y in range(10):
     farming_row = []
@@ -110,7 +110,7 @@ for y in range(len(farming_grid)):
 for item in grid_hitboxes:
     print(item)
 
-##Grid to store whether a crop is growing or not    
+#Grid to store whether a crop is growing or not    
 growth_grid = []
 for y in range(10):
     growth_row = []
@@ -134,14 +134,13 @@ while running:
     #Gets location and checks if mouse is pressed        
     if pygame.mouse.get_pressed()[0]:
         mouseX, mouseY = pygame.mouse.get_pos()
-        mouseHit = pygame.Rect(mouseX,mouseY, 1, 1)
         
         #updating grid to plant crops
-        for numY,row in enumerate(grid_hitboxes):
+        for numY, row in enumerate(grid_hitboxes):
             for numX, rect in enumerate(row):
-                if pygame.Rect(mouseHit).colliderect(pygame.Rect(rect)):
+                if pygame.Rect(rect).collidepoint(mouseX, mouseY):
                     #'carrot' should become a variable for a crop that is selected by the player
-                    plant_crop(numX,numY,'carrot')
+                    plant_crop(numX, numY, 'carrot')
     
     #updating planted crops
     for y in range(len(farming_grid)):
