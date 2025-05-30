@@ -1,0 +1,152 @@
+#Farming Game
+#Reagan
+#2025-05-23
+
+import pygame
+import time
+pygame.init()
+size = (1200,800)
+screen = pygame.display.set_mode(size)
+
+#Reagan
+
+CROP_DATA = {
+    'carrot': {
+        'growth_stages': [200,400,600],
+        'sell_price': 3,
+        'seed_cost': 2,
+        'display_name': 'carrot',
+        'max_stage': 3,
+        'renewable': False,
+        'image_path': 'crop.png',
+        },
+    'potato': {
+        'gtowth_stages': [500,1000],
+        'sell_price' : 6,
+        'seed_cost': 3,
+        'display_name': 'potato',
+        'max_stage': 2,
+        'renewable': False,
+        'image_path': 'crop.png',
+        },
+    'tomato': {
+        'growth_stages': [200,400,800,1500],
+        'sell_price': 4,
+        'seed_cost': 25,
+        'display_name': 'tomato',
+        'max_stage': 4,
+        'renewable': True,
+        'image_path': 'crop.png',
+        },
+    'blueberry': {
+        'growth_stages': [600,1200,1800,1920],
+        'sell_price': 5,
+        'seed_cost':50,
+        'display_name': 'blueberry',
+        'max_stage': 4,
+        'renewable': True,
+        'image_path': 'crop.png',
+    }
+}
+
+
+def plant_crop(x,y,crop_type):
+    if farming_grid[y][x] == 'empty':
+        crop_grown = {
+            'type' : crop_type,
+            'growth_stage' : 0,
+            'growth_timer' : 0,
+            'growth_stages': CROP_DATA[crop_type]['growth_stages'],
+            'max_stage': CROP_DATA[crop_type]['max_stage'],
+            'mature': False
+            }
+        farming_grid[y][x] = crop_grown
+
+def crop_growth(x,y):
+    crop = farming_grid[y][x]
+    
+    print(crop)
+    
+    if crop == 'empty':
+        return False
+    
+    if crop['mature'] == True:
+        return False
+    
+    if not crop['mature']:
+        crop['growth_timer'] += 1
+        if crop['growth_timer'] == crop['growth_stages'][crop['growth_stage']]:
+            crop['growth_stage'] += 1        
+        
+    if crop['growth_stage'] == crop['max_stage']:
+        crop['mature'] = True            
+    
+    return True  
+
+##Colours
+BLACK = (0,0,0)
+RED = (255,0,0)
+
+##Images
+farmingBG = pygame.image.load('FarmingBackground.png')
+farmingBG = pygame.transform.scale(farmingBG,[1200,800])
+
+##Creating the farming grid's stored data
+farming_grid = []
+for y in range(10):
+    farming_row = []
+    for x in range(10):
+        farming_row.append('empty')
+    farming_grid.append(farming_row)
+for item in farming_grid:
+    print(item)
+
+grid_hitboxes = []
+for y in range(len(farming_grid)):
+    grid_hitboxes_row = []
+    for x in range(len(farming_grid)):
+        grid_hitboxes_row.append([116+75*x-5*y,341+y*40-5*x,72,37])
+    grid_hitboxes.append(grid_hitboxes_row)
+for item in grid_hitboxes:
+    print(item)
+
+##Grid to store whether a crop is growing or not    
+growth_grid = []
+for y in range(10):
+    growth_row = []
+    for x in range(10):
+        growth_row.append(False)
+    growth_grid.append(growth_row)
+for item in growth_grid:
+    print(item)
+
+#DELETE LATER------
+clock = pygame.time.Clock()
+running = True
+#-----------------
+while running:
+    screen.fill(BLACK)
+    screen.blit(farmingBG,[0,0])
+
+    ##Hitboxes for planting crops in the farming grid
+    for y in range(len(farming_grid)):
+        for x in range(len(farming_grid)):
+            pygame.draw.rect(screen,RED,[116+75*x-5*y,341+y*40-5*x,72,37],1)
+    if pygame.mouse.get_pressed()[0]:
+        mouseX, mouseY = pygame.mouse.get_pos()
+        mouseHit = [mouseX,mouseY,1,1]
+        pygame.draw.rect(screen,RED,mouseHit,1)
+        for numY,itemY in enumerate(grid_hitboxes):
+            if pygame.Rect.collidelist(mouseHit,itemY[:]) != -1:
+                print(True)
+                
+
+#DELETE LATER----- 
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False          
+            
+    pygame.display.flip()
+    clock.tick(60)
+pygame.quit()
+#-----------------
