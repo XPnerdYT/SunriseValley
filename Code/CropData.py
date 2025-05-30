@@ -18,9 +18,9 @@ CROP_DATA = {
         'image_path': 'crop.png',
         },
     'tomato': {
-        'growth_stages': [100,300,500,1500],
+        'growth_stages': [200,400,800,1500],
         'sell_price': 4,
-        'seed_cost': 6,
+        'seed_cost': 25,
         'display_name': 'tomato',
         'max_stage': 4,
         'renewable': True,
@@ -28,8 +28,11 @@ CROP_DATA = {
         },
     'blueberry': {
         'growth_stages': [600,1200,1800,1920],
-        'sell_price': 2,
-        'seed_cost':10,
+        'sell_price': 5,
+        'seed_cost':50,
+        'display_name': 'blueberry',
+        'max_stage': 4,
+        'renewable': True,
         'image_path': 'crop.png',
     }
 }
