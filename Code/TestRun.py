@@ -20,7 +20,7 @@ CROP_DATA = {
         'image_path': 'crop.png',
         },
     'potato': {
-        'gtowth_stages': [500,1000],
+        'growth_stages': [500,1000],
         'sell_price' : 6,
         'seed_cost': 3,
         'display_name': 'potato',
@@ -64,7 +64,8 @@ def plant_crop(x,y,crop_type):
 def crop_growth(x,y):
     crop = farming_grid[y][x]
     
-    print(crop)
+    if crop != 'empty':
+        print(crop)
     
     if crop == 'empty':
         return False
@@ -124,17 +125,28 @@ running = True
 while running:
     screen.fill(BLACK)
     screen.blit(farmingBG,[0,0])
-
+    
+    #Displaying hitboxes
     for y in range(len(farming_grid)):
         for x in range(len(farming_grid)):
             pygame.draw.rect(screen,RED,[116+75*x-5*y,341+y*40-5*x,72,37],1)
+    
+    #Gets location and checks if mouse is pressed        
     if pygame.mouse.get_pressed()[0]:
         mouseX, mouseY = pygame.mouse.get_pos()
-        mouseHit = [mouseX,mouseY,1,1]
-        pygame.draw.rect(screen,RED,mouseHit,1)
-        for numY,itemY in enumerate(grid_hitboxes):
-            if pygame.Rect(mouseHit).collidelist(itemY) != -1:
-                print(True)
+        mouseHit = pygame.Rect(mouseX,mouseY, 1, 1)
+        
+        #updating grid to plant crops
+        for numY,row in enumerate(grid_hitboxes):
+            for numX, rect in enumerate(row):
+                if pygame.Rect(mouseHit).colliderect(pygame.Rect(rect)):
+                    #'carrot' should become a variable for a crop that is selected by the player
+                    plant_crop(numX,numY,'carrot')
+    
+    #updating planted crops
+    for y in range(len(farming_grid)):
+        for x in range(len(farming_grid[y])):
+            crop_growth(x,y)
                 
 
     for event in pygame.event.get():
