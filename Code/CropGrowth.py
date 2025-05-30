@@ -7,7 +7,7 @@ from CropData import CROP_DATA
 farming_grid = []
 for y in range(10):
     farming_row = []
-    for x in range(8):
+    for x in range(10):
         farming_row.append('empty')
     farming_grid.append(farming_row)
 
