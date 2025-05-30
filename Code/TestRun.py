@@ -8,7 +8,6 @@ pygame.init()
 size = (1200,800)
 screen = pygame.display.set_mode(size)
 
-#Reagan
 
 CROP_DATA = {
     'carrot': {
@@ -120,15 +119,12 @@ for y in range(10):
 for item in growth_grid:
     print(item)
 
-#DELETE LATER------
 clock = pygame.time.Clock()
 running = True
-#-----------------
 while running:
     screen.fill(BLACK)
     screen.blit(farmingBG,[0,0])
 
-    ##Hitboxes for planting crops in the farming grid
     for y in range(len(farming_grid)):
         for x in range(len(farming_grid)):
             pygame.draw.rect(screen,RED,[116+75*x-5*y,341+y*40-5*x,72,37],1)
@@ -137,11 +133,10 @@ while running:
         mouseHit = [mouseX,mouseY,1,1]
         pygame.draw.rect(screen,RED,mouseHit,1)
         for numY,itemY in enumerate(grid_hitboxes):
-            if pygame.Rect.collidelist(mouseHit,itemY[:]) != -1:
+            if pygame.Rect(mouseHit).collidelist(itemY) != -1:
                 print(True)
                 
 
-#DELETE LATER----- 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False          
@@ -149,4 +144,3 @@ while running:
     pygame.display.flip()
     clock.tick(60)
 pygame.quit()
-#-----------------
