@@ -1,3 +1,5 @@
+#Reagan
+
 CROP_DATA = {
     'carrot': {
         'growth_stages': [200,400,600],
