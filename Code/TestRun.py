@@ -6,6 +6,8 @@ import pygame
 import time
 
 from CropData import CROP_DATA
+from Variables import *
+from CropGrowth import plant_crop, crop_growth, farming_grid
 
 pygame.init()
 size = (1200,800)
