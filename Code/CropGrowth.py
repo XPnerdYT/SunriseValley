@@ -1,8 +1,10 @@
 #FarmingGame Crop Test
 #Reagan
 #2025-05-24
+'''
 import time
 from CropData import CROP_DATA
+'''
 
 farming_grid = []
 for y in range(10):
@@ -27,7 +29,8 @@ def plant_crop(x,y,crop_type):
 def crop_growth(x,y):
     crop = farming_grid[y][x]
     
-    print(crop)
+    if crop != 'empty' and not crop['mature']:
+        print(crop)
     
     if crop == 'empty':
         return False
@@ -43,8 +46,8 @@ def crop_growth(x,y):
     if crop['growth_stage'] == crop['max_stage']:
         crop['mature'] = True            
     
-    return True  
-
+    return True   
+'''
 while True:
     plant_crop(2,1,'carrot')
     
@@ -56,3 +59,4 @@ while True:
         continue
     else:
         break 
+'''
