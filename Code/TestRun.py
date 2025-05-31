@@ -26,7 +26,7 @@ def plant_crop(x,y,crop_type):
 def crop_growth(x,y):
     crop = farming_grid[y][x]
     
-    if crop != 'empty':
+    if crop != 'empty' and not crop['mature']:
         print(crop)
     
     if crop == 'empty':
