@@ -13,44 +13,6 @@ pygame.init()
 size = (1200,800)
 screen = pygame.display.set_mode(size)
 
-def plant_crop(x,y,crop_type):
-    if farming_grid[y][x] == 'empty':
-        crop_grown = {
-            'type' : crop_type,
-            'growth_stage' : 0,
-            'growth_timer' : 0,
-            'growth_stages': CROP_DATA[crop_type]['growth_stages'],
-            'max_stage': CROP_DATA[crop_type]['max_stage'],
-            'mature': False
-            }
-        farming_grid[y][x] = crop_grown
-
-def crop_growth(x,y):
-    crop = farming_grid[y][x]
-    
-    if crop != 'empty' and not crop['mature']:
-        print(crop)
-    
-    if crop == 'empty':
-        return False
-    
-    if crop['mature'] == True:
-        return False
-    
-    if not crop['mature']:
-        crop['growth_timer'] += 1
-        if crop['growth_timer'] == crop['growth_stages'][crop['growth_stage']]:
-            crop['growth_stage'] += 1        
-        
-    if crop['growth_stage'] == crop['max_stage']:
-        crop['mature'] = True            
-    
-    return True  
-
-#Colours
-BLACK = (0,0,0)
-RED = (255,0,0)
-
 #Images
 farmingBG = pygame.image.load('FarmingBackground.png')
 farmingBG = pygame.transform.scale(farmingBG,[1200,800])
