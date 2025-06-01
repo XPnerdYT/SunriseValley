@@ -45,6 +45,8 @@ def change_inventory(action, item, count = 0):
             return "Error: Could not remove specified item."
     return 'Success'
 
+
+
 def get_inventory():
     items = []
     for item in inventory:
@@ -77,17 +79,18 @@ def change_gold(action, amount):
         gold['gold'] += amount
     return gold
 
-    
-print(change_inventory("add", 'tomato', 4))
-print(get_item_info('reags'))
-print(get_inventory())
-print(get_item_image('carrot'))
-print(get_inventory_images())
-print(get_gold())
-print(change_gold('add', 100))
+
+if debug:
+    print(change_inventory("add", 'tomato', 4))
+    print(get_item_info('reags'))
+    print(get_inventory())
+    print(get_item_image('carrot'))
+    print(get_inventory_images())
+    print(get_gold())
+    print(change_gold('add', 100))
+    #################################################
+    print(inventory)
+
 
 save_inventory()
 save_gold()
-
-if debug:
-    print(inventory)
