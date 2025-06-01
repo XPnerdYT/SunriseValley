@@ -1,11 +1,11 @@
-#Farming Game
-#2025-05-23
-
 import pygame
 from Variables import *
+
+
 pygame.init()
 size = (1200,800)
 screen = pygame.display.set_mode(size)
+
 
 def plant_crop(x,y,crop_type):
     if farming_grid[y][x] == 'empty':
@@ -18,6 +18,7 @@ def plant_crop(x,y,crop_type):
             'mature': False
             }
         farming_grid[y][x] = crop_grown
+
 
 def crop_growth(x,y):
     crop = farming_grid[y][x]
@@ -41,9 +42,6 @@ def crop_growth(x,y):
     
     return True  
 
-#Colours
-BLACK = (0,0,0)
-RED = (255,0,0)
 
 #Images
 farmingBG = pygame.image.load('images/FarmingBackground.png')
@@ -111,5 +109,6 @@ while running:
             running = False          
             
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(fps)
+    
 pygame.quit()

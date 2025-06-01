@@ -124,7 +124,7 @@ while active:
         if debug: print(buttonsdown, pos, arrowKeys, numKeys, enterKey)
         
         pygame.display.flip()
-        clock.tick(60)
+        clock.tick(fps)
         
         
 pygame.quit()
