@@ -1,9 +1,10 @@
 import pygame
 import random
-from Variables import *
 
 import sys
 import subprocess
+
+from Variables import *
 
 
 ### WINDOW CONFIGURATION ###
@@ -123,7 +124,7 @@ while active:
         if debug: print(buttonsdown, pos, arrowKeys, numKeys, enterKey)
         
         pygame.display.flip()
-        clock.tick(30)
+        clock.tick(60)
         
         
 pygame.quit()

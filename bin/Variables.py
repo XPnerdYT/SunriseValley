@@ -13,3 +13,4 @@ DARKGRAY = (40,40,40)
 
 
 debug = False
+inventoryDebug = False

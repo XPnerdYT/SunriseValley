@@ -1,6 +1,6 @@
 import pygame
 from InventoryManagement import *
-from CropData import CROP_DATA
+from gamedata.CropData import CROP_DATA
 from Variables import *
 
 
