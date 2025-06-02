@@ -45,6 +45,6 @@ CROP_DATA = {
         'max_stage': 4,
         'renewable': True,
         'image_path': 'Blueberry.png',
-        'image_stages': [image_load('Blueberry0.png'),image_load('Blueberry1.png'),image_load('Blueberry2.png'),image_load('Blueberry3.png'),image_load('Blueberry4.png')
+        'image_stages': [image_load('Blueberry0.png'),image_load('Blueberry1.png'),image_load('Blueberry2.png'),image_load('Blueberry3.png'),image_load('Blueberry4.png')]
     }
 }
