@@ -25,6 +25,7 @@ CROP_DATA = {
         'max_stage': 2,
         'renewable': False,
         'image_path': 'crop.png',
+        'image_stages': [image_load('Potato0.png'),image_load('Potato1.png'),image_load('Potato2.png')]
         },
     'tomato': {
         'growth_stages': [180,360,600,780],
