@@ -8,7 +8,7 @@ def image_load(image_path):
 
 CROP_DATA = {
     'carrot': {
-        'growth_stages': [36,72,108],
+        'growth_stages': [60,120,180],
         'sell_price': 3,
         'seed_cost': 2,
         'display_name': 'carrot',
@@ -18,7 +18,7 @@ CROP_DATA = {
         'image_stages': [image_load('Carrot0.png'),image_load('Carrot1.png'),image_load('Carrot2.png'),image_load('Carrot3.png')]
         },
     'potato': {
-        'growth_stages': [72,144],
+        'growth_stages': [120,240],
         'sell_price' : 25,
         'seed_cost': 10,
         'display_name': 'potato',
