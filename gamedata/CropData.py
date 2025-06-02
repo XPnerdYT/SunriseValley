@@ -14,7 +14,7 @@ CROP_DATA = {
         'display_name': 'carrot',
         'max_stage': 3,
         'renewable': False,
-        'image_path': 'crop.png',
+        'image_path': 'Carrot.png',
         'image_stages': [image_load('Carrot0.png'),image_load('Carrot1.png'),image_load('Carrot2.png'),image_load('Carrot3.png')]
         },
     'potato': {
@@ -24,7 +24,7 @@ CROP_DATA = {
         'display_name': 'potato',
         'max_stage': 2,
         'renewable': False,
-        'image_path': 'crop.png',
+        'image_path': 'Potato.png',
         'image_stages': [image_load('Potato0.png'),image_load('Potato1.png'),image_load('Potato2.png')]
         },
     'tomato': {
@@ -34,7 +34,8 @@ CROP_DATA = {
         'display_name': 'tomato',
         'max_stage': 4,
         'renewable': True,
-        'image_path': 'crop.png',
+        'image_path': 'Tomato.png',
+        'image_stages': [ 'image_stages': [image_load('Tomato0.png'),image_load('Tomato1.png'),image_load('Tomato2.png'),image_load('Tomato3.png'),image_load('Tomato4.png')]
         },
     'blueberry': {
         'growth_stages': [240,480,720,780],
@@ -43,7 +44,7 @@ CROP_DATA = {
         'display_name': 'blueberry',
         'max_stage': 4,
         'renewable': True,
-        'image_path': 'crop.png',
+        'image_path': 'Blueberry.png',
         'image_stages': [image_load('Blueberry0.png'),image_load('Blueberry1.png'),image_load('Blueberry2.png'),image_load('Blueberry3.png'),image_load('Blueberry4.png')
     }
 }
