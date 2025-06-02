@@ -1,59 +1,20 @@
-import pygame
-from Variables import *
 
+import pygame
+import time
+
+from gamedata.CropData import CROP_DATA
+from Variables import *
+from CropGrowth import plant_crop, crop_growth, farming_grid
 
 pygame.init()
 size = (1200,800)
 screen = pygame.display.set_mode(size)
 
-
-def plant_crop(x,y,crop_type):
-    if farming_grid[y][x] == 'empty':
-        crop_grown = {
-            'type' : crop_type,
-            'growth_stage' : 0,
-            'growth_timer' : 0,
-            'growth_stages': CROP_DATA[crop_type]['growth_stages'],
-            'max_stage': CROP_DATA[crop_type]['max_stage'],
-            'mature': False
-            }
-        farming_grid[y][x] = crop_grown
-
-
-def crop_growth(x,y):
-    crop = farming_grid[y][x]
-    
-    if crop != 'empty':
-        print(crop)
-    
-    if crop == 'empty':
-        return False
-    
-    if crop['mature'] == True:
-        return False
-    
-    if not crop['mature']:
-        crop['growth_timer'] += 1
-        if crop['growth_timer'] == crop['growth_stages'][crop['growth_stage']]:
-            crop['growth_stage'] += 1        
-        
-    if crop['growth_stage'] == crop['max_stage']:
-        crop['mature'] = True            
-    
-    return True  
-
-
 #Images
 farmingBG = pygame.image.load('images/FarmingBackground.png')
 farmingBG = pygame.transform.scale(farmingBG,[1200,800])
 
-#Creating the farming grid's stored data
-farming_grid = []
-for y in range(10):
-    farming_row = []
-    for x in range(10):
-        farming_row.append('empty')
-    farming_grid.append(farming_row)
+#Display grid for debug
 for item in farming_grid:
     print(item)
 
@@ -61,7 +22,7 @@ grid_hitboxes = []
 for y in range(len(farming_grid)):
     grid_hitboxes_row = []
     for x in range(len(farming_grid)):
-        grid_hitboxes_row.append([116+75*x-5*y,341+y*40-5*x,72,37])
+        grid_hitboxes_row.append([116+75*x-5*y,343+y*40-5*x,70,39])
     grid_hitboxes.append(grid_hitboxes_row)
 for item in grid_hitboxes:
     print(item)
@@ -76,16 +37,19 @@ for y in range(10):
 for item in growth_grid:
     print(item)
 
+counter = 0
 clock = pygame.time.Clock()
 running = True
 while running:
     screen.fill(BLACK)
     screen.blit(farmingBG,[0,0])
     
-    #Displaying hitboxes
-    for y in range(len(farming_grid)):
-        for x in range(len(farming_grid)):
-            pygame.draw.rect(screen,RED,[116+75*x-5*y,341+y*40-5*x,72,37],1)
+    #Adds a tick every 5 frames
+    tick = 0
+    counter += 1
+    if counter % 5 == 0:
+        tick = 1
+        counter = 0
     
     #Gets location and checks if mouse is pressed        
     if pygame.mouse.get_pressed()[0]:
@@ -101,7 +65,9 @@ while running:
     #updating planted crops
     for y in range(len(farming_grid)):
         for x in range(len(farming_grid[y])):
-            crop_growth(x,y)
+            cropImg = crop_growth(x,y,tick)
+            if cropImg != False:
+                screen.blit(cropImg,(grid_hitboxes[y][x][:2]))
                 
 
     for event in pygame.event.get():
@@ -110,5 +76,3 @@ while running:
             
     pygame.display.flip()
     clock.tick(fps)
-    
-pygame.quit()
