@@ -60,7 +60,7 @@ while running:
             for numX, rect in enumerate(row):
                 if pygame.Rect(rect).collidepoint(mouseX, mouseY):
                     #'carrot' should become a variable for a crop that is selected by the player
-                    plant_crop(numX, numY, 'carrot')
+                    plant_crop(numX, numY, 'potato')
     
     #updating planted crops
     for y in range(len(farming_grid)):
