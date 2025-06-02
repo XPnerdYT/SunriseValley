@@ -3,7 +3,7 @@ import pygame
 
 def image_load(image_path):
     image = pygame.image.load('crops/' + image_path)
-    image = pygame.transform.scale(image,[69,39])
+    image = pygame.transform.scale(image,[64,38])
     return image
 
 CROP_DATA = {
