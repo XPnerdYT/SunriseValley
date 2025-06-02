@@ -27,7 +27,7 @@ CROP_DATA = {
         'image_path': 'crop.png',
         },
     'tomato': {
-        'growth_stages': [60,120,180,324],
+        'growth_stages': [180,360,600,780],
         'sell_price': 10,
         'seed_cost': 100,
         'display_name': 'tomato',
