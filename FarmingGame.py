@@ -22,7 +22,7 @@ grid_hitboxes = []
 for y in range(len(farming_grid)):
     grid_hitboxes_row = []
     for x in range(len(farming_grid)):
-        grid_hitboxes_row.append([116+75*x-5*y,343+y*40-5*x,70,39])
+        grid_hitboxes_row.append([116+75*x-5*y,344+y*40-5*x,70,39])
     grid_hitboxes.append(grid_hitboxes_row)
 for item in grid_hitboxes:
     print(item)
@@ -60,7 +60,7 @@ while running:
             for numX, rect in enumerate(row):
                 if pygame.Rect(rect).collidepoint(mouseX, mouseY):
                     #'carrot' should become a variable for a crop that is selected by the player
-                    plant_crop(numX, numY, 'carrot')
+                    plant_crop(numX, numY, 'potato')
     
     #updating planted crops
     for y in range(len(farming_grid)):

@@ -3,6 +3,8 @@ from Variables import *
 import json
 
 
+reloadInv = True
+
 ### IMPORT / SAVE INVENTORY ###
 with open('gamedata/Inventory.json', 'r') as invJson:
     inventory = json.load(invJson)
@@ -16,6 +18,20 @@ def save_inventory():
         json.dump(inventory, invJson)
 
 
+
+def trigger_reload():
+    global reloadInv
+    reloadInv = True
+
+def reload_done():
+    global reloadInv
+    reloadInv = False
+
+def reload_check():
+    return reloadInv
+
+
+    
 ### INVENTORY MANAGEMENT ADD / REMOVE / SUBTRACT ITEMS FUNCTIONS ###
 def change_inventory(action, item, count = 0):
     
@@ -43,8 +59,8 @@ def change_inventory(action, item, count = 0):
             inventory.pop(item)
         else:
             return "Error: Could not remove specified item."
+    trigger_reload()
     return 'Success'
-
 
 ### RETRIEVE INVENTORY ITEMS ###
 def get_inventory():
@@ -86,7 +102,9 @@ def change_gold(action, amount):
         gold['gold'] -= amount
     elif action == "add":
         gold['gold'] += amount
+    trigger_reload()
     return gold
+
 
 
 ### DEBUGGING ###

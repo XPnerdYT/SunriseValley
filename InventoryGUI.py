@@ -30,31 +30,20 @@ goldfont = pygame.font.SysFont('Calibri', 24, True, False)
 # Load gold info
 goldimg = pygame.image.load('images/gold.png')
 goldimg = pygame.transform.scale(goldimg, (32, 32))
-screen.blit(goldimg, [20, 20])
 # ----
 textImg = goldfont.render('$' + str(get_gold()), True, WHITE)
-screen.blit(textImg, [60,25])
 
 # Load hotbar image
 hotbarBg = pygame.image.load('images/hotbarbg.png')
-screen.blit(hotbarBg, [400, 760])
 
-# Load crop images within loop
-i = 0
+# Load inventory images
 for item in get_inventory():
-    ## Debug ##
-    if debug:
-        print(item)
-        get_item_info(item)
-    
     cropimg = pygame.image.load('crops/'+get_item_image(item))
-    cropimg = pygame.transform.scale(cropimg, (32, 32))
-    screen.blit(cropimg, [(404+i*40), 764])
-    
-    textImg = font.render(str(get_item_info(item)), True, BLACK)
-    screen.blit(textImg, [406+i*40,766])
-    
-    i += 1
+    cropimg = pygame.transform.scale(cropimg, (32, 32))    
+
+
+
+
 
 
 ### SET FONT ###
@@ -109,6 +98,29 @@ while active:
         ### MOUSE POSITION ###
         pos = pygame.mouse.get_pos()
         
+        
+        if reload_check() == True:
+            screen.blit(goldimg, [20, 20])
+            screen.blit(textImg, [60,25])
+            screen.blit(hotbarBg, [400, 760])
+            # Load crop images within loop
+            i = 0
+            for item in get_inventory():
+                ## Debug ##
+                if debug == False:
+                    print(item)
+                    get_item_info(item)
+                
+                screen.blit(cropimg, [(404+i*40), 764])
+                
+                textImg = font.render(str(get_item_info(item)), True, BLACK)
+                screen.blit(textImg, [406+i*40,766])
+                
+                i += 1
+                
+            reload_done()
+        
+        print(reload_check())
         
         ### DEBUGGING ###
         if debug: 
