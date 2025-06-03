@@ -35,7 +35,7 @@ CROP_DATA = {
         'max_stage': 4,
         'renewable': True,
         'image_path': 'Tomato.png',
-        'image_stages': [ 'image_stages': [image_load('Tomato0.png'),image_load('Tomato1.png'),image_load('Tomato2.png'),image_load('Tomato3.png'),image_load('Tomato4.png')]
+        #'image_stages': [image_load('Tomato0.png'),image_load('Tomato1.png'),image_load('Tomato2.png'),image_load('Tomato3.png'),image_load('Tomato4.png')]
         },
     'blueberry': {
         'growth_stages': [240,480,720,780],
@@ -48,3 +48,4 @@ CROP_DATA = {
         'image_stages': [image_load('Blueberry0.png'),image_load('Blueberry1.png'),image_load('Blueberry2.png'),image_load('Blueberry3.png'),image_load('Blueberry4.png')]
     }
 }
+
