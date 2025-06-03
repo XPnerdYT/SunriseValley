@@ -17,7 +17,7 @@ size = (1200,800)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Sunrise Valley")
 
-
+invImg = {}
 
 font = pygame.font.SysFont('Calibri', 16, True, False)
 goldfont = pygame.font.SysFont('Calibri', 24, True, False)
@@ -35,13 +35,12 @@ textImg = goldfont.render('$' + str(get_gold()), True, WHITE)
 
 # Load hotbar image
 hotbarBg = pygame.image.load('images/hotbarbg.png')
+hotbarSelected = pygame.image.load('images/hotbarSelected.png')
 
 # Load inventory images
 for item in get_inventory():
     cropimg = pygame.image.load('crops/'+get_item_image(item))
     cropimg = pygame.transform.scale(cropimg, (32, 32))    
-
-
 
 
 
@@ -114,17 +113,59 @@ while active:
                 screen.blit(cropimg, [(404+i*40), 764])
                 
                 textImg = font.render(str(get_item_info(item)), True, BLACK)
-                screen.blit(textImg, [406+i*40,766])
+                invImg[i] = screen.blit(textImg, [406+i*40,766])
                 
                 i += 1
                 
             reload_done()
         
-        print(reload_check())
         
+        
+        
+        
+        
+        
+        i = 0
+        
+        for item in get_inventory():
+            if invImg[i].collidepoint(pos):
+                screen.blit(hotbarSelected, [406+i*40,762])
+            i += 1
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        print(reload_check())
+        print(invImg)
         ### DEBUGGING ###
         if debug: 
             print(buttonsdown, pos, arrowKeys)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         pygame.display.flip()
         clock.tick(fps)
