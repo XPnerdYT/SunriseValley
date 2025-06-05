@@ -1,13 +1,7 @@
 import pygame
 from InventoryManagement import *
-from gamedata.CropData import CROP_DATA
 from Variables import *
-
-
-pygame_icon = pygame.image.load('images/gameicon.ico')
-pygame.display.set_icon(pygame_icon)
-
-
+from gamedata.CropData import CROP_DATA
 
 
 ### WINDOW CONFIGURATION ###
@@ -17,32 +11,69 @@ size = (1200,800)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Sunrise Valley")
 
-invImg = {}
+pygame_icon = pygame.image.load('images/gameicon.ico')
+pygame.display.set_icon(pygame_icon)
 
+
+### VARIABLE PRESETS ###
+itemamount = {}
+holdingitem = [False, 'empty', 0]
+inventory = get_inventory()
+invImg = {}
+cropimg = {}
+
+
+### FONTS ###
 font = pygame.font.SysFont('Calibri', 16, True, False)
 goldfont = pygame.font.SysFont('Calibri', 24, True, False)
 
 
+### RELOAD HOTBAR IMAGES ###
+def reload_hotbar():
+    
+    screen.fill(BLACK)
+    
+    # Globalize
+    global goldImg, textImg, hotbarBg, invImg, debug, itemamount, goldimg
+    
+    # Render images and text
+    goldtext = goldfont.render('$' + str(get_gold()), True, WHITE)
+    screen.blit(goldimg, [20, 20])
+    screen.blit(goldtext, [60,25])
+    screen.blit(hotbarBg, [400, 760])
+    
+    # Load item amounts
+    for i, item in enumerate(inventory):
+        itemamount[i] = str(get_item_info(item))
+        
+    # Load crop images within loop    
+    for i, item in enumerate(inventory):
+        
+        ## Debug ##
+        if debug == False:
+            print(item)
+            get_item_info(item)
+        
+        # Render items and amounts
+        invImg[i] = screen.blit(cropimg[i], [(404+i*40), 764])
+        screen.blit(font.render(itemamount[i], True, BLACK), [406+i*40,766])
+        
+    reload_done()
 
 
 ### LOAD IMAGES ###
 
-# Load gold info
+# Load gold image
 goldimg = pygame.image.load('images/gold.png')
 goldimg = pygame.transform.scale(goldimg, (32, 32))
-# ----
-textImg = goldfont.render('$' + str(get_gold()), True, WHITE)
 
 # Load hotbar image
 hotbarBg = pygame.image.load('images/hotbarbg.png')
 hotbarSelected = pygame.image.load('images/hotbarSelected.png')
 
 # Load inventory images
-for item in get_inventory():
-    cropimg = pygame.image.load('crops/'+get_item_image(item))
-    cropimg = pygame.transform.scale(cropimg, (32, 32))    
-
-
+for i, item in enumerate(inventory):
+    cropimg[i] = pygame.transform.scale(pygame.image.load('crops/'+get_item_image(item)), (32, 32))
 
 
 ### SET FONT ###
@@ -58,7 +89,6 @@ arrowKeys = [False, False, False, False]
 clock = pygame.time.Clock()
 
 pygame.display.flip()
-
 
 ### GAME LOOP ###
 while active:
@@ -98,73 +128,41 @@ while active:
         pos = pygame.mouse.get_pos()
         
         
+        ### RELOADING HOTBAR ###
         if reload_check() == True:
-            screen.blit(goldimg, [20, 20])
-            screen.blit(textImg, [60,25])
-            screen.blit(hotbarBg, [400, 760])
-            # Load crop images within loop
-            i = 0
-            for item in get_inventory():
-                ## Debug ##
-                if debug == False:
-                    print(item)
-                    get_item_info(item)
-                
-                screen.blit(cropimg, [(404+i*40), 764])
-                
-                textImg = font.render(str(get_item_info(item)), True, BLACK)
-                invImg[i] = screen.blit(textImg, [406+i*40,766])
-                
-                i += 1
-                
-            reload_done()
+            inventory = get_inventory()
+            reload_hotbar()
         
         
-        
-        
-        
-        
-        
-        i = 0
-        
-        for item in get_inventory():
+        ### CHECK HOVER ###
+        hovering = False
+        for i, item in enumerate(inventory):
             if invImg[i].collidepoint(pos):
-                screen.blit(hotbarSelected, [406+i*40,762])
-            i += 1
+                screen.blit(hotbarSelected, [400 + i * 40, 760])
+                screen.blit(cropimg[i], [(404+i*40), 764])
+                screen.blit(font.render(itemamount[i], True, BLACK), [406+i*40,766])
+                
+                if buttonsdown[0]:
+                    holdingitem = [True, item, holdingitem[2]+1, i]
+                hovering = True
+            
+        if not hovering:
+            reload_hotbar()
+
+        if holdingitem[0]:
+            pygame.draw.rect(screen, BLACK, [(402+holdingitem[3]*40), 764, 36,32], 2)
         
+        if buttonsdown[0] and holdingitem[2] == 2:
+            holdingitem = [False, 'empty', 0]
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        print(reload_check())
-        print(invImg)
+
         ### DEBUGGING ###
-        if debug: 
+        if debug:
+            print(change_inventory("add", 'tomato', 4))
+            print(change_gold('add', 100))            
+            print(reload_check())
+            print(invImg)            
             print(buttonsdown, pos, arrowKeys)
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         
         
         pygame.display.flip()

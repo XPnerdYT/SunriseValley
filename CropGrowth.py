@@ -1,7 +1,3 @@
-#FarmingGame Crop Test
-#Reagan
-#2025-05-24
-
 from gamedata.CropData import CROP_DATA
 import pygame
 
@@ -43,11 +39,31 @@ def crop_growth(x,y,tick):
         if crop['growth_timer'] == crop['growth_stages'][crop['growth_stage']]:
             crop['growth_stage'] += 1
             if crop['growth_stage'] == crop['max_stage']:
-                crop['mature'] = True             
-      
-    #For debugging
-    if tick == 1:
-        print(crop)     
+                crop['mature'] = True
+                
+    farming_grid[y][x] = crop
                    
-    
     return cropImg   
+
+def harvest_crop(x,y):
+    crop = farming_grid[y][x]
+    if crop == 'empty':
+        return False  
+    
+    if crop['mature']:
+        #change_inventory('add',crop['type'],1)
+        
+        if crop['renewable']:
+            crop['growth_stage'] = crop['max_stage'] - 1
+            crop['growth_timer'] = crop['growth_stages'][crop['growth_stage']-1]
+            crop['mature'] = False
+            farming_grid[y][x] = crop
+            return True
+            
+        else:
+            crop = 'empty'  
+   
+            farming_grid[y][x] = crop         
+            return True
+    
+    return False

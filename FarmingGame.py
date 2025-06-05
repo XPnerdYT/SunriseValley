@@ -1,10 +1,9 @@
-
 import pygame
 import time
 
 from gamedata.CropData import CROP_DATA
 from Variables import *
-from CropGrowth import plant_crop, crop_growth, farming_grid
+from CropGrowth import *
 
 pygame.init()
 size = (1200,800)
@@ -14,28 +13,12 @@ screen = pygame.display.set_mode(size)
 farmingBG = pygame.image.load('images/FarmingBackground.png')
 farmingBG = pygame.transform.scale(farmingBG,[1200,800])
 
-#Display grid for debug
-for item in farming_grid:
-    print(item)
-
 grid_hitboxes = []
 for y in range(len(farming_grid)):
     grid_hitboxes_row = []
     for x in range(len(farming_grid)):
-        grid_hitboxes_row.append([116+75*x-5*y,344+y*40-5*x,70,39])
+        grid_hitboxes_row.append([121+75*x-5*y,345+y*40-5*x,70,39])
     grid_hitboxes.append(grid_hitboxes_row)
-for item in grid_hitboxes:
-    print(item)
-
-#Grid to store whether a crop is growing or not    
-growth_grid = []
-for y in range(10):
-    growth_row = []
-    for x in range(10):
-        growth_row.append(False)
-    growth_grid.append(growth_row)
-for item in growth_grid:
-    print(item)
 
 counter = 0
 clock = pygame.time.Clock()
@@ -43,6 +26,9 @@ running = True
 while running:
     screen.fill(BLACK)
     screen.blit(farmingBG,[0,0])
+    
+    #Add a feature where player selects crops, for now we can just change this variable to test different crops
+    selected = 'blueberry'
     
     #Adds a tick every 5 frames
     tick = 0
@@ -59,8 +45,10 @@ while running:
         for numY, row in enumerate(grid_hitboxes):
             for numX, rect in enumerate(row):
                 if pygame.Rect(rect).collidepoint(mouseX, mouseY):
-                    #'carrot' should become a variable for a crop that is selected by the player
-                    plant_crop(numX, numY, 'potato')
+                    if farming_grid[numY][numX] == 'empty':
+                        plant_crop(numX, numY, selected)
+                    else:
+                        harvest_crop(numX, numY)
     
     #updating planted crops
     for y in range(len(farming_grid)):

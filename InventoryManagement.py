@@ -18,18 +18,23 @@ def save_inventory():
         json.dump(inventory, invJson)
 
 
-
+### TRIGGERING RELOAD OF ITEMS ###
 def trigger_reload():
     global reloadInv
     reloadInv = True
+    save_inventory()
+    save_gold()    
 
+
+### INDICATE RELOAD FINISHED ###
 def reload_done():
     global reloadInv
     reloadInv = False
 
+
+### CHECK RELOAD STATUS ###
 def reload_check():
     return reloadInv
-
 
     
 ### INVENTORY MANAGEMENT ADD / REMOVE / SUBTRACT ITEMS FUNCTIONS ###
@@ -118,8 +123,3 @@ if inventoryDebug:
     print(change_gold('add', 100))
     ###########################################
     print(inventory)
-
-
-### SAVE ITEMS ###
-save_inventory()
-save_gold()

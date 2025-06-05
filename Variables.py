@@ -10,8 +10,6 @@ ORANGE = (255,153,0)
 GRAY = (204,204,204)
 DARKGRAY = (40,40,40)
 
-
-
 debug = False
 inventoryDebug = False
 
