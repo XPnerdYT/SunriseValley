@@ -18,7 +18,7 @@ screen = pygame.display.set_mode(size)
 
 ### VARIABLE PRESETS ###
 itemamount = {}
-holdingitem = [False, 'empty', 0]
+holdingitem = [False, None, 0]
 inventory = get_inventory()
 invImg = {}
 cropimg = {}
@@ -100,7 +100,6 @@ for y in range(len(farming_grid)):
 counter = 0
 clock = pygame.time.Clock()
 active = True
-selected = None
 
 while active:
     
@@ -145,15 +144,17 @@ while active:
             hovering = True
 
             # Move click handling into the event loop
-        
-            if buttonsdown[0] and holdingitem[2] == 0:
-                holdingitem[2] = 1
-            elif holdingitem[2] == 1 and not buttonsdown[0]:
-                holdingitem = [True, get_inventory()[i], 2, i]
-            elif buttonsdown[0] and holdingitem[2] == 2:
-                holdingitem[2] = 3
-            elif not buttonsdown[0] and holdingitem[2] == 3:
-                holdingitem = [False, 'empty', 0, 'none']
+            if holdingitem[0] and invImg[holdingitem[3]].collidepoint(pos):
+                holdingitem = [True, get_inventory()[i], 1, i]
+            else:
+                if buttonsdown[0] and holdingitem[2] == 0:
+                    holdingitem[2] = 1
+                elif holdingitem[2] == 1 and not buttonsdown[0]:
+                    holdingitem = [True, get_inventory()[i], 2, i]
+                elif buttonsdown[0] and holdingitem[2] == 2:
+                    holdingitem[2] = 3
+                elif not buttonsdown[0] and holdingitem[2] == 3:
+                    holdingitem = [False, None, 0, None]
     
     if not hovering:
         reload_hotbar()
