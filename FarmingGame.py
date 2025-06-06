@@ -157,13 +157,17 @@ while active:
         if invImg[i].collidepoint(pos):
             screen.blit(hotbarBg, [400, 760])
             screen.blit(hotbarSelected, [400 + i * 40, 760])
-            screen.blit(cropimg[i], [(404+i*40), 764])
-            screen.blit(font.render(itemamount[i], True, BLACK), [406+i*40,766])
-            
-            if buttonsdown[0]:
-                holdingitem = [True, item, holdingitem[2]+1, i]
+
+            for i1, item in enumerate(inventory):
+                invImg[i1] = screen.blit(cropimg[i1], [(404+i1*40), 764])
+                screen.blit(font.render(itemamount[i1], True, BLACK), [406+i1*40,766])
+
             hovering = True
-        
+
+            # Move click handling into the event loop
+            for event in pygame.event.get(pygame.MOUSEBUTTONDOWN):
+                if event.button == 1 and invImg[i].collidepoint(event.pos):
+                    holdingitem = [True, item, 1, i]
     if not hovering:
         reload_hotbar()
 
