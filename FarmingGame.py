@@ -49,7 +49,7 @@ def reload_hotbar():
     for i, item in enumerate(inventory):
         
         ## Debug ##
-        if debug == False:
+        if debug == True:
             print(item)
             get_item_info(item)
         
@@ -100,11 +100,12 @@ for y in range(len(farming_grid)):
 counter = 0
 clock = pygame.time.Clock()
 active = True
-
+selected = None
 
 while active:
     
     ### EVENT LISTENER ###
+        ### EVENT LISTENER ###
     for event in pygame.event.get():
         ### QUIT LISTENER ###
         if event.type == pygame.QUIT:
@@ -112,36 +113,15 @@ while active:
         
         
         ### MOUSE LISTENER ###
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            buttonsdown = pygame.mouse.get_pressed()
-        # Every time a mouse button is lifted, buttonsdown variable is updated 
-        # to account for the lifted button
-        if event.type == pygame.MOUSEBUTTONUP:
-            buttonsdown = pygame.mouse.get_pressed()
-            
-        
-        ### ARROW KEYS LISTENER ###
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP: arrowKeys[0] = True
-            if event.key == pygame.K_DOWN: arrowKeys[1] = True
-            if event.key == pygame.K_LEFT: arrowKeys[2] = True
-            if event.key == pygame.K_RIGHT: arrowKeys[3] = True
-        # Every time a arrow key button is lifted, arrowKeys list is updated
-        # to account for the lifted key
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_UP: arrowKeys[0] = False
-            if event.key == pygame.K_DOWN: arrowKeys[1] = False
-            if event.key == pygame.K_LEFT: arrowKeys[2] = False
-            if event.key == pygame.K_RIGHT: arrowKeys[3] = False
+        buttonsdown = pygame.mouse.get_pressed()
         
         
         ### MOUSE POSITION ###
         pos = pygame.mouse.get_pos()    
-    
 
 
     
-    
+    ### RELOAD BACKGROUND
     screen.blit(farmingBG,[0,0])
     
     
@@ -165,22 +145,27 @@ while active:
             hovering = True
 
             # Move click handling into the event loop
-            for event in pygame.event.get(pygame.MOUSEBUTTONDOWN):
-                if event.button == 1 and invImg[i].collidepoint(event.pos):
-                    holdingitem = [True, item, 1, i]
+        
+            if buttonsdown[0] and holdingitem[2] == 0:
+                holdingitem[2] = 1
+            elif holdingitem[2] == 1 and not buttonsdown[0]:
+                holdingitem = [True, get_inventory()[i], 2, i]
+            elif buttonsdown[0] and holdingitem[2] == 2:
+                holdingitem[2] = 3
+            elif not buttonsdown[0] and holdingitem[2] == 3:
+                holdingitem = [False, 'empty', 0, 'none']
+    
     if not hovering:
         reload_hotbar()
 
     if holdingitem[0]:
         pygame.draw.rect(screen, BLACK, [(402+holdingitem[3]*40), 764, 36,32], 2)
+        
     
-    if buttonsdown[0] and holdingitem[2] == 2:
-        holdingitem = [False, 'empty', 0]    
 
         
     
     #Add a feature where player selects crops, for now we can just change this variable to test different crops
-    selected = 'blueberry'
     
     #Adds a tick every 5 frames
     tick = 0
@@ -195,7 +180,7 @@ while active:
     
     
     #Gets location and checks if mouse is pressed        
-    if pygame.mouse.get_pressed()[0]:
+    if buttonsdown[0]:
         
         
         #updating grid to plant crops
@@ -203,7 +188,7 @@ while active:
             for numX, rect in enumerate(row):
                 if pygame.Rect(rect).collidepoint(pos[0], pos[1]):
                     if farming_grid[numY][numX] == 'empty':
-                        plant_crop(numX, numY, selected)
+                        plant_crop(numX, numY, holdingitem[1])
                     else:
                         harvest_crop(numX, numY)
     
@@ -213,8 +198,11 @@ while active:
             cropImg = crop_growth(x,y,tick)
             if cropImg != False:
                 screen.blit(cropImg,(grid_hitboxes[y][x][:2]))
+                
                        
             
     pygame.display.flip()
     clock.tick(fps)
-    
+
+print(selected)    
+pygame.quit()

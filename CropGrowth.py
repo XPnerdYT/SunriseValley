@@ -10,6 +10,8 @@ for y in range(10):
 
 
 def plant_crop(x,y,crop_type):
+    if crop_type == None:
+        return
     if farming_grid[y][x] == 'empty':
         crop_grown = {
             'type' : crop_type,
