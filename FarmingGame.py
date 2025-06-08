@@ -1,3 +1,4 @@
+
 import pygame
 import time
 
@@ -9,9 +10,6 @@ from InventoryManagement import *
 pygame.init()
 size = (1200,800)
 screen = pygame.display.set_mode(size)
-
-
-
 
 
 
@@ -28,6 +26,12 @@ cropimg = {}
 font = pygame.font.SysFont('Calibri', 16, True, False)
 goldfont = pygame.font.SysFont('Calibri', 24, True, False)
 
+def sell_hitbox(selected,mouse_pos,button):
+    hitbox = pygame.Rect(880,500,320,280)
+    if selected != None and hitbox.collidepoint(mouse_pos) and button[0] and inventory[selected] != 0:
+        holdingitem = [False, None, 0, None]
+        return True
+        
 
 ### RELOAD HOTBAR IMAGES ###
 def reload_hotbar():
@@ -123,7 +127,11 @@ while active:
     ### RELOAD BACKGROUND
     screen.blit(farmingBG,[0,0])
     
-    
+    #Selling crops
+    if sell_hitbox(holdingitem[1],pos,buttonsdown):
+        earned = sell(holdingitem[1])
+        change_gold("add",earned)
+        
     ### RELOADING HOTBAR ###
     if reload_check() == True:
         inventory = get_inventory()
@@ -141,10 +149,7 @@ while active:
                 invImg[i1] = screen.blit(cropimg[i1], [(404+i1*40), 764])
                 screen.blit(font.render(itemamount[i1], True, BLACK), [406+i1*40,766])
 
-            hovering = True
-
-            # Move click handling into the event loop
-            if holdingitem[0] and invImg[holdingitem[3]].collidepoint(pos):
+            if holdingitem[2] == 2 and buttonsdown[0] and invImg[i].collidepoint(pos) and not invImg[holdingitem[3]].collidepoint(pos):
                 holdingitem = [True, get_inventory()[i], 1, i]
             else:
                 if buttonsdown[0] and holdingitem[2] == 0:
@@ -155,6 +160,8 @@ while active:
                     holdingitem[2] = 3
                 elif not buttonsdown[0] and holdingitem[2] == 3:
                     holdingitem = [False, None, 0, None]
+            
+            hovering = True
     
     if not hovering:
         reload_hotbar()
@@ -162,8 +169,6 @@ while active:
     if holdingitem[0]:
         pygame.draw.rect(screen, BLACK, [(402+holdingitem[3]*40), 764, 36,32], 2)
         
-    
-
         
     
     #Add a feature where player selects crops, for now we can just change this variable to test different crops
@@ -199,11 +204,8 @@ while active:
             cropImg = crop_growth(x,y,tick)
             if cropImg != False:
                 screen.blit(cropImg,(grid_hitboxes[y][x][:2]))
-                
-                       
-            
+    
     pygame.display.flip()
     clock.tick(fps)
 
-print(selected)    
 pygame.quit()
