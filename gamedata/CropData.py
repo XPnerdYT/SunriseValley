@@ -28,14 +28,14 @@ CROP_DATA = {
         'image_stages': [image_load('Potato0.png'),image_load('Potato1.png'),image_load('Potato2.png')]
         },
     'tomato': {
-        'growth_stages': [200,400,600,1020],
+        'growth_stages': [200,600,1020],
         'sell_price': 20,
         'seed_cost': 200,
         'display_name': 'tomato',
-        'max_stage': 4,
+        'max_stage': 3,
         'renewable': True,
         'image_path': 'crop.png',
-        'image_stages': [image_load('Tomato0.png'),image_load('Tomato1.png'),image_load('Tomato2.png'),image_load('Tomato3.png'),image_load('Tomato4.png')]
+        'image_stages': [image_load('Tomato0.png'),image_load('Tomato1.png'),image_load('Tomato2.png'),image_load('Tomato3.png')]
         },
     'wheat':{
         'growth_stages': [80,160,240],
@@ -43,7 +43,7 @@ CROP_DATA = {
         'seed_cost': 500,
         'display_name': 'wheat',
         'max_stage': 3,
-        'renewable': False
+        'renewable': False,
         'image_path': 'Wheat.png',
         'image_stages': [image_load('Wheat0.png'),image_load('Wheat1.png'),image_load('Wheat2.png'),image_load('Wheat3.png')]
         },
@@ -68,7 +68,7 @@ CROP_DATA = {
         'image_stages': [image_load('Corn0.png'),image_load('Corn1.png'),image_load('Corn2.png'),image_load('Corn3.png'),image_load('Corn4.png')]
         },
     'pumpkin': {
-        'growth_stages': [600,,1200,1800],
+        'growth_stages': [600,1200,1800],
         'sell_price': 100000,
         'seed_cost': 40000,
         'display_name': 'pumpkin',
@@ -116,7 +116,7 @@ CROP_DATA = {
         'renewable': True,
         'image_path': 'Rgbberry.png',
         'image_stages': [image_load('Rgbberry0.png'),image_load('Rgbberry1.png'),image_load('Rgbberry2.png'),image_load('Rgbberry3.png'),image_load('Rgbberry4.png')]
-        
+    
     }
 }
 
