@@ -1,4 +1,3 @@
-
 import pygame
 import time
 
@@ -11,7 +10,6 @@ from Selling import *
 pygame.init()
 size = (1200,800)
 screen = pygame.display.set_mode(size)
-
 
 
 
@@ -39,10 +37,10 @@ def sell_hitbox(selected,mouse_pos,button):
 def reload_hotbar():
     
     # Globalize
-    global goldImg, textImg, hotbarBg, invImg, debug, itemamount, goldimg
+    global goldImg, goldtext, textImg, hotbarBg, invImg, debug, itemamount, goldimg
     
     # Render images and text
-    goldtext = goldfont.render('$' + str(get_gold()), True, WHITE)
+    goldtext = goldfont.render('$' + str(get_gold()), True, BLACK)
     screen.blit(goldimg, [20, 20])
     screen.blit(goldtext, [60,25])
     screen.blit(hotbarBg, [400, 760])
@@ -124,20 +122,24 @@ while active:
         ### MOUSE POSITION ###
         pos = pygame.mouse.get_pos()    
 
-
-    
-    ### RELOAD BACKGROUND
-    screen.blit(farmingBG,[0,0])
+ 
     
     #Selling crops
     if sell_hitbox(holdingitem[1],pos,buttonsdown):
         earned = sell(holdingitem[1])
         change_gold("add",earned)
         
+        
     ### RELOADING HOTBAR ###
     if reload_check() == True:
         inventory = get_inventory()
         reload_hotbar()
+    
+    
+    ### RELOAD BACKGROUND
+    screen.blit(farmingBG,[0,0])
+    screen.blit(goldimg, [20, 20])
+    screen.blit(goldtext, [60,25]) 
     
     
     ### CHECK HOVER ###
@@ -189,8 +191,6 @@ while active:
     
     #Gets location and checks if mouse is pressed        
     if buttonsdown[0]:
-        
-        
         #updating grid to plant crops
         for numY, row in enumerate(grid_hitboxes):
             for numX, rect in enumerate(row):

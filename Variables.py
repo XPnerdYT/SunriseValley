@@ -9,6 +9,8 @@ YELLOW = (255,255,0)
 ORANGE = (255,153,0)
 GRAY = (204,204,204)
 DARKGRAY = (40,40,40)
+DARKYELLOW = (255,235,135)
+LIGHTRED = (255,100,100)
 
 debug = False
 inventoryDebug = False
