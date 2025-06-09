@@ -6,6 +6,7 @@ from gamedata.CropData import CROP_DATA
 from Variables import *
 from CropGrowth import *
 from InventoryManagement import *
+from Selling import *
 
 pygame.init()
 size = (1200,800)
@@ -27,8 +28,9 @@ font = pygame.font.SysFont('Calibri', 16, True, False)
 goldfont = pygame.font.SysFont('Calibri', 24, True, False)
 
 def sell_hitbox(selected,mouse_pos,button):
+    global holdingitem
     hitbox = pygame.Rect(880,500,320,280)
-    if selected != None and hitbox.collidepoint(mouse_pos) and button[0] and inventory[selected] != 0:
+    if selected != None and hitbox.collidepoint(mouse_pos) and button[0] and holdingitem[1] != 0:
         holdingitem = [False, None, 0, None]
         return True
         

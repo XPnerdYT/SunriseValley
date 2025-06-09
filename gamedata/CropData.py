@@ -28,13 +28,13 @@ CROP_DATA = {
         'image_stages': [image_load('Potato0.png'),image_load('Potato1.png'),image_load('Potato2.png')]
         },
     'tomato': {
-        'growth_stages': [200,600,1020],
+        'growth_stages': [300,600,1020],
         'sell_price': 20,
         'seed_cost': 200,
         'display_name': 'tomato',
         'max_stage': 3,
         'renewable': True,
-        'image_path': 'crop.png',
+        'image_path': 'Tomato.png',
         'image_stages': [image_load('Tomato0.png'),image_load('Tomato1.png'),image_load('Tomato2.png'),image_load('Tomato3.png')]
         },
     'wheat':{
@@ -69,48 +69,38 @@ CROP_DATA = {
         },
     'pumpkin': {
         'growth_stages': [600,1200,1800],
-        'sell_price': 100000,
+        'sell_price': 80000,
         'seed_cost': 40000,
         'display_name': 'pumpkin',
         'max_stage': 3,
         'renewable': False,
         'image_path': 'Pumpkin.png',
-        'image_stages': [image_load('Pumpkin0.png'),image_load('Pumpkin.png'),image_load('Pumpkin.png'),image_load('Pumpkin3.png')]
+        'image_stages': [image_load('Pumpkin0.png'),image_load('Pumpkin1.png'),image_load('Pumpkin2.png'),image_load('Pumpkin3.png')]
         },
-    'd': {
-        'growth_stages': [240,480,720,780],
-        'sell_price': 20,
-        'seed_cost':250,
-        'display_name': 'blueberry',
+    'grape': {
+        'growth_stages': [300,600,900,1000],
+        'sell_price': 50000,
+        'seed_cost':1000000,
+        'display_name': 'grape',
         'max_stage': 4,
         'renewable': True,
-        'image_path': 'Blueberry.png',
-        'image_stages': [image_load('Blueberry0.png'),image_load('Blueberry1.png'),image_load('Blueberry2.png'),image_load('Blueberry3.png'),image_load('Blueberry4.png')]
-        },
-    'c': {
-        'growth_stages': [240,480,720,780],
-        'sell_price': 20,
-        'seed_cost':250,
-        'display_name': 'blueberry',
-        'max_stage': 4,
-        'renewable': True,
-        'image_path': 'Blueberry.png',
-        'image_stages': [image_load('Blueberry0.png'),image_load('Blueberry1.png'),image_load('Blueberry2.png'),image_load('Blueberry3.png'),image_load('Blueberry4.png')]
+        'image_path': 'Grape.png',
+        'image_stages': [image_load('Grape0.png'),image_load('Grape1.png'),image_load('Grape2.png'),image_load('Grape3.png'),image_load('Grape4.png')]
         },
     'mushroom': {
-        'growth_stages': [600,1200,1800,2400],
-        'sell_price': 5000000,
-        'seed_cost': 1000000,
+        'growth_stages': [800,1600,2400],
+        'sell_price': 25000000,
+        'seed_cost': 5000000,
         'display_name': 'mushroom',
-        'max_stage': 4,
+        'max_stage': 3,
         'renewable': False,
         'image_path': 'Mushroom.png',
-        'image_stages': [image_load('Mushroom0.png'),image_load('Mushroom1.png'),image_load('Mushroom2.png'),image_load('Mushroom3.png'),image_load('Mushroom4.png')]
+        'image_stages': [image_load('Mushroom0.png'),image_load('Mushroom1.png'),image_load('Mushroom2.png'),image_load('Mushroom3.png')]
         },
     'rgbberry': {
         'growth_stages': [600,1200,1800,2000],
         'sell_price': 1000000,
-        'seed_cost':10000000,
+        'seed_cost':100000000,
         'display_name': 'rgbberry',
         'max_stage': 4,
         'renewable': True,
