@@ -4,6 +4,7 @@ import json
 
 
 reloadInv = True
+zeroedItem = False
 
 ### IMPORT / SAVE INVENTORY ###
 with open('gamedata/Inventory.json', 'r') as invJson:
@@ -40,13 +41,15 @@ def reload_check():
 ### INVENTORY MANAGEMENT ADD / REMOVE / SUBTRACT ITEMS FUNCTIONS ###
 def change_inventory(action, item, count = 0):
     
+    global zeroedItem
+    
     if action == "add":
         if item not in inventory:
             inventory[item] = count
         elif item in inventory:
             inventory[item] += count
         else:
-            return "Error: Could not add item"
+            return "error.additem"
         
     elif action == "subtract":
         if item in inventory:
@@ -54,18 +57,22 @@ def change_inventory(action, item, count = 0):
                 inventory[item] -= count
                 if inventory[item] == 0:
                     inventory.pop(item)
+                    zeroedItem = True
+                    return "item.zeroed"
             elif inventory[item] < count:
-                return "Error: Subtract amount is larger than amount in inventory."
+                return "error.subtractlarger"
         else:
-            return "Error: Could not subtract item"
+            return "error.subtractitem"
     
     elif action == "remove":
         if item in inventory:
             inventory.pop(item)
+            zeroedItem = True
+            return "item.zeroed"
         else:
-            return "Error: Could not remove specified item."
+            return "error.couldnotremoveitem"
     trigger_reload()
-    return 'Success'
+    return 'success'
 
 ### RETRIEVE INVENTORY ITEMS ###
 def get_inventory():
@@ -111,15 +118,16 @@ def change_gold(action, amount):
     return gold
 
 
+### ZEROED ITEM ###
+def zeroed_item():
+    global zeroedItem
+    
+    if zeroedItem:
+        return True
+    else:
+        return False
 
-### DEBUGGING ###
-if inventoryDebug:
-    print(change_inventory("add", 'tomato', 4))
-    print(get_item_info('reags'))
-    print(get_inventory())
-    print(get_item_image('carrot'))
-    print(get_inventory_images())
-    print(get_gold())
-    print(change_gold('add', 100))
-    ###########################################
-    print(inventory)
+def zeroed_done():
+    global zeroedItem
+    
+    zeroedItem = False

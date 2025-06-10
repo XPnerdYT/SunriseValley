@@ -16,6 +16,7 @@ screen = pygame.display.set_mode(size)
 ### VARIABLE PRESETS ###
 itemamount = {}
 holdingitem = [False, None, 0]
+bag = []
 inventory = get_inventory()
 invImg = {}
 cropimg = {}
@@ -25,12 +26,44 @@ cropimg = {}
 font = pygame.font.SysFont('Calibri', 16, True, False)
 goldfont = pygame.font.SysFont('Calibri', 24, True, False)
 
-def sell_hitbox(selected,mouse_pos,button):
-    global holdingitem
+
+
+#Harvesting and Selling
+def harvest_crop(x,y):
+    crop = farming_grid[y][x]
+    if crop == 'empty':
+        return False  
+    
+    if crop['mature']:
+        bag.append(crop['type'])
+        
+        if crop['renewable']:
+            crop['growth_stage'] = crop['max_stage'] - 1
+            crop['growth_timer'] = crop['growth_stages'][crop['growth_stage']-1]
+            crop['mature'] = False
+            farming_grid[y][x] = crop
+            return True
+            
+        else:
+            crop = 'empty'  
+   
+            farming_grid[y][x] = crop         
+            return True
+    
+    return False
+def sell_hitbox(mouse_pos,button):
     hitbox = pygame.Rect(880,500,320,280)
-    if selected != None and hitbox.collidepoint(mouse_pos) and button[0] and holdingitem[1] != 0:
-        holdingitem = [False, None, 0, None]
+    if bag != [] and hitbox.collidepoint(mouse_pos) and button[0]:
         return True
+def sell():
+    global bag
+    total = 0
+    if bag == []:
+        return
+    for item in bag:
+        total += CROP_DATA[item]['sell_price']
+    bag = []
+    change_gold('add',total)
         
 
 ### RELOAD HOTBAR IMAGES ###
@@ -58,7 +91,7 @@ def reload_hotbar():
             get_item_info(item)
         
         # Render items and amounts
-        invImg[i] = screen.blit(cropimg[i], [(404+i*40), 764])
+        invImg[i] = screen.blit(cropimg[item], [(404+i*40), 764])
         screen.blit(font.render(itemamount[i], True, BLACK), [406+i*40,766])
         
     reload_done()
@@ -75,8 +108,8 @@ hotbarBg = pygame.image.load('images/hotbarbg.png')
 hotbarSelected = pygame.image.load('images/hotbarSelected.png')
 
 # Load inventory images
-for i, item in enumerate(inventory):
-    cropimg[i] = pygame.transform.scale(pygame.image.load('crops/'+get_item_image(item)), (32, 32))
+for item in inventory:
+    cropimg[item] = pygame.transform.scale(pygame.image.load('crops/'+get_item_image(item)), (32, 32))
 
 
 ### SET FONT ###
@@ -90,9 +123,13 @@ arrowKeys = [False, False, False, False]
 
 
 
-#Images
+#Background image
 farmingBG = pygame.image.load('images/FarmingBackground.png')
 farmingBG = pygame.transform.scale(farmingBG,[1200,800])
+
+#Backpack image
+Bagpng = pygame.image.load('images/Bag.png')
+Bagpng = pygame.transform.scale(Bagpng,[38,38])
 
 grid_hitboxes = []
 for y in range(len(farming_grid)):
@@ -125,15 +162,21 @@ while active:
  
     
     #Selling crops
-    if sell_hitbox(holdingitem[1],pos,buttonsdown):
-        earned = sell(holdingitem[1])
-        change_gold("add",earned)
+    if sell_hitbox(pos,buttonsdown):
+        sell()
         
         
     ### RELOADING HOTBAR ###
+    if zeroed_item() == True:
+        holdingitem = [False, None, 0, None]
+        zeroed_done()
+        trigger_reload()
+    
     if reload_check() == True:
         inventory = get_inventory()
         reload_hotbar()
+    
+    
     
     
     ### RELOAD BACKGROUND
@@ -150,7 +193,7 @@ while active:
             screen.blit(hotbarSelected, [400 + i * 40, 760])
 
             for i1, item in enumerate(inventory):
-                invImg[i1] = screen.blit(cropimg[i1], [(404+i1*40), 764])
+                invImg[i1] = screen.blit(cropimg[item], [(404+i1*40), 764])
                 screen.blit(font.render(itemamount[i1], True, BLACK), [406+i1*40,766])
 
             if holdingitem[2] == 2 and buttonsdown[0] and invImg[i].collidepoint(pos) and not invImg[holdingitem[3]].collidepoint(pos):
@@ -173,9 +216,8 @@ while active:
     if holdingitem[0]:
         pygame.draw.rect(screen, BLACK, [(402+holdingitem[3]*40), 764, 36,32], 2)
         
-        
-    
-    #Add a feature where player selects crops, for now we can just change this variable to test different crops
+    screen.blit(Bagpng,[795,760])
+    screen.blit(font.render(str(len(bag)),True,BLACK),[827,766])
     
     #Adds a tick every 5 frames
     tick = 0
@@ -196,8 +238,11 @@ while active:
             for numX, rect in enumerate(row):
                 if pygame.Rect(rect).collidepoint(pos[0], pos[1]):
                     if farming_grid[numY][numX] == 'empty':
-                        plant_crop(numX, numY, holdingitem[1])
-                    else:
+                        if get_item_info(holdingitem[1]) > 0:
+                            #Plants a crop and subtracts from inventory
+                            plant_crop(numX, numY, holdingitem[1])
+                            change_inventory('subtract',holdingitem[1],1)
+                    if farming_grid[numY][numX] != 'empty' and holdingitem[1] == None:
                         harvest_crop(numX, numY)
     
     #updating planted crops
