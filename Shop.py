@@ -23,7 +23,7 @@ hasBeenReleased = 0
 
 ### LOAD IMAGES ###
 
-# Load gold image
+# Load shop images
 shopimg = pygame.image.load('images/shop.png')
 shopimg = pygame.transform.scale(shopimg, (800, 746))
 shopcrops = pygame.image.load('images/shopitems.png')

@@ -23,12 +23,12 @@ cropimg = {}
 
 
 ### FONTS ###
-font = pygame.font.SysFont('Calibri', 16, True, False)
+font = pygame.font.SysFont('Calibri', 20, True, False)
 goldfont = pygame.font.SysFont('Calibri', 24, True, False)
 
 
 
-#Harvesting and Selling
+### HARVESTING SYSTEM ###
 def harvest_crop(x,y):
     crop = farming_grid[y][x]
     if crop == 'empty':
@@ -46,15 +46,20 @@ def harvest_crop(x,y):
             
         else:
             crop = 'empty'  
-   
-            farming_grid[y][x] = crop         
+            
+            farming_grid[y][x] = crop   
             return True
     
     return False
+
+
+### HITBOX FOR SELLING ###
 def sell_hitbox(mouse_pos,button):
     hitbox = pygame.Rect(880,500,320,280)
     if bag != [] and hitbox.collidepoint(mouse_pos) and button[0]:
         return True
+    
+### SELL BAG ###
 def sell():
     global bag
     total = 0
@@ -107,29 +112,24 @@ goldimg = pygame.transform.scale(goldimg, (32, 32))
 hotbarBg = pygame.image.load('images/hotbarbg.png')
 hotbarSelected = pygame.image.load('images/hotbarSelected.png')
 
+# Background image
+farmingBG = pygame.image.load('images/FarmingBackground.png')
+farmingBG = pygame.transform.scale(farmingBG,[1200,800])
+
+# Backpack image
+Bagpng = pygame.image.load('images/Bag.png')
+Bagpng = pygame.transform.scale(Bagpng,[38,38])
+
 # Load inventory images
 for item in inventory:
     cropimg[item] = pygame.transform.scale(pygame.image.load('crops/'+get_item_image(item)), (32, 32))
 
-
-### SET FONT ###
-font = pygame.font.SysFont('Calibri', 20, True, False)
 
 
 ### DEFAULT BUTTON SENSING VALUES
 buttonsdown = (False, False, False)
 arrowKeys = [False, False, False, False]
 
-
-
-
-#Background image
-farmingBG = pygame.image.load('images/FarmingBackground.png')
-farmingBG = pygame.transform.scale(farmingBG,[1200,800])
-
-#Backpack image
-Bagpng = pygame.image.load('images/Bag.png')
-Bagpng = pygame.transform.scale(Bagpng,[38,38])
 
 grid_hitboxes = []
 for y in range(len(farming_grid)):
@@ -151,53 +151,62 @@ while active:
         if event.type == pygame.QUIT:
             active = False
         
-        
         ### MOUSE LISTENER ###
         buttonsdown = pygame.mouse.get_pressed()
-        
         
         ### MOUSE POSITION ###
         pos = pygame.mouse.get_pos()    
 
  
     
-    #Selling crops
+    ### SELL CROPS ###
     if sell_hitbox(pos,buttonsdown):
         sell()
         
-        
-    ### RELOADING HOTBAR ###
-    if zeroed_item() == True:
+    ### RELOADING HOTBAR ONCE ZEROED ###
+    if zeroed_item():
         holdingitem = [False, None, 0, None]
         zeroed_done()
         trigger_reload()
     
-    if reload_check() == True:
+    ### RELOADING HOTBAR ###
+    if reload_check():
         inventory = get_inventory()
         reload_hotbar()
     
     
-    
-    
-    ### RELOAD BACKGROUND
+    ### RELOAD IMAGES ###
     screen.blit(farmingBG,[0,0])
     screen.blit(goldimg, [20, 20])
-    screen.blit(goldtext, [60,25]) 
+    screen.blit(goldtext, [60,25])
+    screen.blit(Bagpng,[800,760])
+    screen.blit(font.render(str(len(bag)),True,WHITE),[808,770])    
     
     
-    ### CHECK HOVER ###
+    ### CHECK HOVERING AND CLICKING IN HOTBAR ###
+    
+    # Hover value default
     hovering = False
+    
     for i, item in enumerate(inventory):
+        
+        # Check for hover
         if invImg[i].collidepoint(pos):
+            
+            # Reload hotbar background and item selected image
             screen.blit(hotbarBg, [400, 760])
             screen.blit(hotbarSelected, [400 + i * 40, 760])
-
+            
+            # Redraw all items and values
             for i1, item in enumerate(inventory):
                 invImg[i1] = screen.blit(cropimg[item], [(404+i1*40), 764])
                 screen.blit(font.render(itemamount[i1], True, BLACK), [406+i1*40,766])
-
+            
+            # Click checking for if another item has already been selected
             if holdingitem[2] == 2 and buttonsdown[0] and invImg[i].collidepoint(pos) and not invImg[holdingitem[3]].collidepoint(pos):
                 holdingitem = [True, get_inventory()[i], 1, i]
+                
+            # Click checking (Only apply image once the button has been let go to eliminate issues with timing
             else:
                 if buttonsdown[0] and holdingitem[2] == 0:
                     holdingitem[2] = 1
@@ -208,16 +217,18 @@ while active:
                 elif not buttonsdown[0] and holdingitem[2] == 3:
                     holdingitem = [False, None, 0, None]
             
+            # Set hover value to true
             hovering = True
     
+    # If hover value is false, reload the hotbar
     if not hovering:
         reload_hotbar()
 
+    # If holding an item, draw square around item
     if holdingitem[0]:
         pygame.draw.rect(screen, BLACK, [(402+holdingitem[3]*40), 764, 36,32], 2)
         
-    screen.blit(Bagpng,[795,760])
-    screen.blit(font.render(str(len(bag)),True,BLACK),[827,766])
+    
     
     #Adds a tick every 5 frames
     tick = 0
