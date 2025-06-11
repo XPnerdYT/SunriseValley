@@ -1,28 +1,29 @@
 import pygame
 import time
+import random
 
 from gamedata.CropData import CROP_DATA
 from Variables import *
 from CropGrowth import *
 from InventoryManagement import *
+from gamedata.FarmingGrid import farming_grid
 
 pygame.init()
 size = (1200,800)
 screen = pygame.display.set_mode(size)
 
-
-
 ### VARIABLE PRESETS ###
 itemamount = {}
 holdingitem = [False, None, 0]
-bag = []
 inventory = get_inventory()
 invImg = {}
-cropimg = {}
+hotbarimg = {}
 counter = 0
 clock = pygame.time.Clock()
 active = True
 shop_open = False
+playlist = []
+hotbarN = [False, False, False, False, False, False, False, False, False, False]
 
 shopHB = {}
 shopitems = ['carrot', 'potato', 'tomato', 'wheat', 'blueberry', 'corn', 'pumpkin', 'grape', 'mushroom', 'rgbberry']
@@ -34,27 +35,37 @@ font = pygame.font.SysFont('Calibri', 18, True, False)
 goldfont = pygame.font.SysFont('Calibri', 24, True, False)
 
 
+with open('gamedata/Bag.json', 'r') as bagJson:
+    bag = json.load(bagJson)
+    
+def save_bag():
+    with open('gamedata/Bag.json', 'w') as bagJson:
+        json.dump(bag, bagJson)
+
+def save_grid():
+    with open('gamedata/FarmingGrid.py', 'w') as gridPy:
+        gridPy.write("farming_grid = " + repr(farming_grid))
+
+
+
 ### MUSIC ###
 #Creating music playlist
-music1 = "sfx/1-07. Haggstrom.mp3"
-music2 = "sfx/gentle-fields-194622.mp3"
-music3 = "sfx/11. Village from Your Past [Ocarina of Time].mp3"
-music4 = "sfx/01. Stardew Valley Overture.mp3"
-playlist = [music1,music2,music3,music4]
-def play_music(playlist):
-    pygame.mixer.music.load(playlist[0])
+songs = ["sfx/1-07. Haggstrom.mp3","sfx/gentle-fields-194622.mp3","sfx/11. Village from Your Past [Ocarina of Time].mp3","sfx/01. Stardew Valley Overture.mp3"]
+def play_music():
+    song = random.choice(songs)
+    nextsong = random.choice(songs)    
+    
+    pygame.mixer.music.load(song)
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play()
-    playlist.append(playlist[0])
-    playlist.pop(0)
-    pygame.mixer.music.queue(playlist[0])
+    pygame.mixer.music.queue(nextsong)
 
 
 
 ### HARVESTING SYSTEM ###
 def harvest_crop(x,y):
     crop = farming_grid[y][x]
-    if crop == 'empty':
+    if crop == "empty":
         return False  
     
     if crop['mature']:
@@ -68,7 +79,7 @@ def harvest_crop(x,y):
             return True
             
         else:
-            crop = 'empty'  
+            crop = "empty"  
             
             farming_grid[y][x] = crop   
             return True
@@ -103,7 +114,7 @@ def sell():
 def reload_hotbar():
     
     # Globalize
-    global goldImg, goldtext, textImg, hotbarBg, invImg, debug, itemamount, goldimg, cropimg, invenentory
+    global goldImg, goldtext, textImg, hotbarBg, invImg, itemamount, goldimg, hotbarimg, inventory
     
     inventory = get_inventory()
     
@@ -118,7 +129,7 @@ def reload_hotbar():
         itemamount[i] = str(get_item_info(item))
         
         # Render items and amounts
-        invImg[i] = screen.blit(cropimg[item], [(404+i*40), 764])
+        invImg[i] = screen.blit(hotbarimg[item], [(404+i*40), 764])
         screen.blit(font.render(itemamount[i], True, WHITE), [406+i*40,766])
         
     reload_done()
@@ -191,12 +202,13 @@ shopcrops = pygame.transform.scale(shopcrops, (800, 746))
 
 # Load crop images
 for item in CROP_DATA:
-    cropimg[item] = pygame.transform.scale(pygame.image.load('crops/' + get_item_image(item)), (32, 32))
+    hotbarimg[item] = pygame.transform.scale(pygame.image.load('crops/' + get_item_image(item)), (32, 32))
 
 
 ### DEFAULT BUTTON SENSING VALUES
 buttonsdown = (False, False, False)
 arrowKeys = [False, False, False, False]
+keyisdown = False
 
 
 grid_hitboxes = []
@@ -215,16 +227,26 @@ while active:
         if event.type == pygame.QUIT:
             active = False
         
-        ### MOUSE LISTENER ###
-        buttonsdown = pygame.mouse.get_pressed()
-        
-        ### MOUSE POSITION ###
-        pos = pygame.mouse.get_pos()   
+        if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
+            
+            hotbarN = pygame.key.name(event.key)
+            
+            if event.type == pygame.KEYDOWN and hotbarN in ['0','1','2','3','4','5','6','7','8','9']:
+                keyisdown = True
+            else:
+                keyisdown = False
+
+    
+    ### MOUSE LISTENER ###
+    buttonsdown = pygame.mouse.get_pressed()
+    
+    ### MOUSE POSITION ###
+    pos = pygame.mouse.get_pos()
     
     
     ### PLAY MUSIC ###
     if not pygame.mixer.music.get_busy():
-        play_music(playlist)
+        play_music()
         
     
     ### SELL CROPS ###
@@ -260,18 +282,18 @@ while active:
         counter = 0
     
     
-    #Gets location and checks if mouse is pressed   
+    #Gets location and checks if mouse is pressed
     if buttonsdown[0] and not shop_open:
         #updating grid to plant crops
         for numY, row in enumerate(grid_hitboxes):
             for numX, rect in enumerate(row):
                 if pygame.Rect(rect).collidepoint(pos[0], pos[1]):
-                    if farming_grid[numY][numX] == 'empty':
+                    if farming_grid[numY][numX] == "empty":
                         if get_item_info(holdingitem[1]) > 0:
                             #Plants a crop and subtracts from inventory
                             plant_crop(numX, numY, holdingitem[1])
                             change_inventory('subtract',holdingitem[1],1)
-                    if farming_grid[numY][numX] != 'empty' and holdingitem[1] == None:
+                    if farming_grid[numY][numX] != "empty" and holdingitem[1] == None:
                         harvest_crop(numX, numY)
     
     #updating planted crops
@@ -280,8 +302,6 @@ while active:
             cropImg = crop_growth(x,y,tick)
             if cropImg != False:
                 screen.blit(cropImg,(grid_hitboxes[y][x][:2]))
-    
-    
     
     
     
@@ -295,6 +315,14 @@ while active:
     
     for i, item in enumerate(inventory):
         
+        if keyisdown:
+            i = int(hotbarN)
+            if i == 0 and len(inventory) > 1:
+                holdingitem = [True, inventory[9], 2, 9]
+            elif i < len(inventory):
+                holdingitem = [True, inventory[i-1], 2, i-1]
+            
+            
         # Check for hover
         if invImg[i].collidepoint(pos):
             
@@ -306,19 +334,19 @@ while active:
             
             # Redraw all items and values
             for i1, item in enumerate(inventory):
-                invImg[i1] = screen.blit(cropimg[item], [(404+i1*40), 764])
+                invImg[i1] = screen.blit(hotbarimg[item], [(404+i1*40), 764])
                 screen.blit(font.render(itemamount[i1], True, WHITE), [406+i1*40,766])
             
             # Click checking for if another item has already been selected
             if holdingitem[2] == 2 and buttonsdown[0] and invImg[i].collidepoint(pos) and not invImg[holdingitem[3]].collidepoint(pos):
-                holdingitem = [True, get_inventory()[i], 1, i]
+                holdingitem = [True, inventory[i], 1, i]
                 
             # Click checking (Only apply image once the button has been let go to eliminate issues with timing)
             else:
                 if buttonsdown[0] and holdingitem[2] == 0:
                     holdingitem[2] = 1
                 elif holdingitem[2] == 1 and not buttonsdown[0]:
-                    holdingitem = [True, get_inventory()[i], 2, i]
+                    holdingitem = [True, inventory[i], 2, i]
                 elif buttonsdown[0] and holdingitem[2] == 2:
                     holdingitem[2] = 3
                 elif not buttonsdown[0] and holdingitem[2] == 3:
@@ -344,4 +372,7 @@ while active:
     pygame.display.flip()
     clock.tick(fps)
 
+
+save_grid()
+save_bag()
 pygame.quit()

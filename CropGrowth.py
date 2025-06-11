@@ -1,13 +1,6 @@
-from gamedata.CropData import CROP_DATA
+from gamedata.CropData import *
 import pygame
-
-farming_grid = []
-for y in range(10):
-    farming_row = []
-    for x in range(10):
-        farming_row.append('empty')
-    farming_grid.append(farming_row)
-
+from gamedata.FarmingGrid import farming_grid
 
 def plant_crop(x,y,crop_type):
     if crop_type == None:
@@ -21,7 +14,6 @@ def plant_crop(x,y,crop_type):
             'growth_stages': CROP_DATA[crop_type]['growth_stages'],
             'max_stage': CROP_DATA[crop_type]['max_stage'],
             'renewable': CROP_DATA[crop_type]['renewable'],
-            'image_stages': CROP_DATA[crop_type]['image_stages'],
             }
         farming_grid[y][x] = crop_grown
 
@@ -31,7 +23,7 @@ def crop_growth(x,y,tick):
     if crop == 'empty':
         return False 
     
-    cropImg = crop['image_stages'][crop['growth_stage']]
+    cropImg = CROP_DATA[crop['type']]['image_stages'][crop['growth_stage']]
     
     if crop['mature'] == True:
         return cropImg         
@@ -45,7 +37,7 @@ def crop_growth(x,y,tick):
                 
     farming_grid[y][x] = crop
                    
-    return cropImg   
+    return cropImg  
 
 def harvest_crop(x,y):
     crop = farming_grid[y][x]
