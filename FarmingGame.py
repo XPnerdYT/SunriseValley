@@ -5,7 +5,6 @@ from gamedata.CropData import CROP_DATA
 from Variables import *
 from CropGrowth import *
 from InventoryManagement import *
-from Selling import *
 
 pygame.init()
 size = (1200,800)
@@ -36,7 +35,12 @@ goldfont = pygame.font.SysFont('Calibri', 24, True, False)
 
 
 ### MUSIC ###
-playlist = ["music/CrossyRoad001.mp3","music/Haggstrom.mp3","music/HarvestSymphony.mp3"]
+#Creating music playlist
+music1 = "sfx/1-07. Haggstrom.mp3"
+music2 = "sfx/gentle-fields-194622.mp3"
+music3 = "sfx/11. Village from Your Past [Ocarina of Time].mp3"
+music4 = "sfx/01. Stardew Valley Overture.mp3"
+playlist = [music1,music2,music3,music4]
 def play_music(playlist):
     pygame.mixer.music.load(playlist[0])
     pygame.mixer.music.set_volume(0.5)
@@ -99,21 +103,19 @@ def sell():
 def reload_hotbar():
     
     # Globalize
-    global goldImg, goldtext, textImg, hotbarBg, invImg, debug, itemamount, goldimg, cropimg
+    global goldImg, goldtext, textImg, hotbarBg, invImg, debug, itemamount, goldimg, cropimg, invenentory
+    
+    inventory = get_inventory()
     
     # Render images and text
     goldtext = goldfont.render('$' + str(get_gold()), True, BLACK)
     screen.blit(goldimg, [15, 15])
     screen.blit(goldtext, [55,20])
     screen.blit(hotbarBg, [400, 760])
-    inventory = get_inventory()
         
     # Load crop images within loop    
     for i, item in enumerate(inventory):
         itemamount[i] = str(get_item_info(item))
-        
-        if item not in cropimg:
-            cropimg[item] = pygame.transform.scale(pygame.image.load('crops/' + get_item_image(item)), (32, 32))        
         
         # Render items and amounts
         invImg[i] = screen.blit(cropimg[item], [(404+i*40), 764])
@@ -187,10 +189,9 @@ shopimg = pygame.transform.scale(shopimg, (800, 746))
 shopcrops = pygame.image.load('images/shopitems.png')
 shopcrops = pygame.transform.scale(shopcrops, (800, 746))
 
-# Load inventory images
-for item in inventory:
-    cropimg[item] = pygame.transform.scale(pygame.image.load('crops/'+get_item_image(item)), (32, 32))
-
+# Load crop images
+for item in CROP_DATA:
+    cropimg[item] = pygame.transform.scale(pygame.image.load('crops/' + get_item_image(item)), (32, 32))
 
 
 ### DEFAULT BUTTON SENSING VALUES
@@ -218,15 +219,7 @@ while active:
         buttonsdown = pygame.mouse.get_pressed()
         
         ### MOUSE POSITION ###
-        pos = pygame.mouse.get_pos()    
-    
-    
-    
-    for item in inventory:
-        if item not in cropimg:
-            cropimg[item] = pygame.transform.scale(pygame.image.load('crops/' + get_item_image(item)), (32, 32))
-    
-    
+        pos = pygame.mouse.get_pos()   
     
     
     ### PLAY MUSIC ###
@@ -249,7 +242,6 @@ while active:
     
     ### RELOADING HOTBAR ###
     if reload_check():
-        inventory = get_inventory()
         reload_hotbar()
     
     
