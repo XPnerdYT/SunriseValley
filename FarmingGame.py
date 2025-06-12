@@ -238,11 +238,44 @@ shovelcursor = pygame.transform.scale(shovelcursor,[16,16])
 # Back button
 backimg = pygame.image.load('images/back.png')
 
+
 # Load crop images
 for item in CROP_DATA:
     hotbarimg[item] = pygame.transform.scale(pygame.image.load('crops/' + get_item_image(item)), (32, 32))
 
+#Bee
+beeR = pygame.image.load('images/beeRight.png')
+beeR = pygame.transform.scale(beeR,[32,32])
+beeL = pygame.image.load('images/beeLeft.png')
+beeL = pygame.transform.scale(beeL,[32,32])
 
+def moving_bee():
+    global bee_pos,bee_direction, bee_timer, bee_speed
+    
+    #Moving bee
+    bee_pos[0] += bee_direction[0] * bee_speed[0]
+    bee_pos[1] += bee_direction[1] * bee_speed[1]
+
+    #Keeping bee in set boundary
+    if bee_pos[0] <= 100 or bee_pos[0] >= 1100:
+        bee_direction[0] *= -1
+    if bee_pos[1] <= 100 or bee_pos[1] >= 700:
+        bee_direction[1] *= -1
+
+    #Random direction
+    bee_timer += 1
+    if bee_timer > 120:
+        bee_direction = [random.randint(-1,1), random.randint(-1,1)]
+        bee_speed = [random.randint(1,4), random.randint(1,4)]
+        bee_timer = 0
+
+    #Pick bee image direction
+    if bee_direction[0] >= 0:
+        bee_img = beeR
+    else:
+        bee_img = beeL
+
+    screen.blit(bee_img, bee_pos)
 
 ### FARMING GRID HITBOXES ###
 grid_hitboxes = []
@@ -252,6 +285,11 @@ for y in range(len(farming_grid)):
         grid_hitboxes_row.append([121+75*x-5*y,345+y*40-5*x,70,39])
     grid_hitboxes.append(grid_hitboxes_row)
 
+#Base variables for bee function
+bee_speed = [1,1]
+bee_timer = 0
+bee_direction = [1,1]
+bee_pos = [random.randint(200,1000),random.randint(200,600)]
 
 while active:
     
@@ -355,6 +393,8 @@ while active:
                             
                     if farming_grid[numY][numX] != "empty" and holdingitem[1] == None:
                         harvest_crop(numX, numY)
+                        
+    moving_bee()
     
     #updating planted crops
     for y in range(len(farming_grid)):
