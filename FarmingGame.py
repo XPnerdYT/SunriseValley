@@ -287,7 +287,7 @@ while active:
         sell()
     
     ### SHOP HITBOX ###
-    if shop_hitbox(pos,buttonsdown):
+    if shop_hitbox(pos,buttonsdown) and not shop_open:
         shop_open = True
     
     ### SHOP OPENED VALUE FOR EFFICIENCY IN THE SHOP LOOP (IF THE SHOP HAS ALREADY BEEN OPENED, DON'T RELOAD CERTAIN THINGS LIKE HITBOXES) ###
