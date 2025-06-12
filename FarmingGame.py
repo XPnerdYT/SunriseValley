@@ -187,6 +187,7 @@ def open_shop():
                     change_inventory("add", shopitems[i], 1)
                     change_gold("subtract", CROP_DATA[shopitems[i]]['seed_cost'])
                     reload_hotbar()
+        hasBeenReleased = 0
     
     # Close button
     if close.collidepoint(pos) and buttonsdown[0]:
