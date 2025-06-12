@@ -1,7 +1,6 @@
 import pygame
 import random
 import math
-
 import sys
 import subprocess
 
@@ -13,7 +12,6 @@ active = True
 pygame.init()
 size = (1200,800)
 screen = pygame.display.set_mode(size)
-pygame.display.set_caption("Exercise Set #5")
 
 
 ### SET FONT ###
@@ -46,6 +44,7 @@ def distance(x1,y1,x2,y2):
     distance = math.sqrt((x2-x1)**2+(y2-y1)**2)
     return distance
 
+### VELOCITY FOR COW ###
 def speed_change(distance,speed):
     if distance < 100 and speed < 8:
         speed += 0.3
@@ -66,6 +65,8 @@ def speed_change(distance,speed):
         
     return speed
 
+
+### MOVE THE COW AND COLLISIONS ###
 def moving_cow(speed):
     global left, right, up, down, cowx, cowy, cow_rect
     cow_rect = pygame.Rect(cowx, cowy, 112, 72)
@@ -91,6 +92,8 @@ def moving_cow(speed):
         down = False
         up = True
 
+
+### EASTER EGG YOU WEREN'T SUPPOSED TO FIND ###
 def cow_moo():
     moo = random.choice(sfxList)
     pygame.mixer.music.load(moo)
@@ -158,9 +161,9 @@ while active:
             if event.key == pygame.K_2: numKeys[1] = False
             if event.key == pygame.K_3: numKeys[2] = False
             if event.key == pygame.K_RETURN: enterKey = False
+       
         
-        ### LOWER BUTTONS ###
-        
+    ### LOWER BUTTONS ###    
     if playHb.collidepoint(pos) or numKeys[0]:
         screen.blit(hplay, [350, 625])
         if buttonsdown[0] or enterKey:
@@ -169,19 +172,18 @@ while active:
     elif instructionsHb.collidepoint(pos) or numKeys[1]:
         screen.blit(hinstructions, [540, 625])
         if buttonsdown[0] or enterKey:
-            pass
+            subprocess.Popen([sys.executable, "Instructions.py"])
+            active = False            
     elif quitHb.collidepoint(pos) or numKeys[2]:
         screen.blit(hquit, [730, 625]) 
         if buttonsdown[0] or enterKey:
             active = False
-            
+    
+    ### EASTER EGG YOU WEREN'T SUPPOSED TO SEE ###
     elif cow_rect.collidepoint(pos) and buttonsdown[0]:
         if not pygame.mixer.music.get_busy():
             cow_moo()
         
-        
-    ### DEBUGGING ###
-    if debug: print(buttonsdown, pos, arrowKeys, numKeys, enterKey)
         
     pygame.display.flip()
     clock.tick(fps)

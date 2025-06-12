@@ -13,7 +13,5 @@ DARKERYELLOW = (221,185,0)
 DARKYELLOW = (255,235,135)
 LIGHTRED = (255,100,100)
 
-debug = False
-inventoryDebug = False
-
+### FPS VALUE ###
 fps = 60

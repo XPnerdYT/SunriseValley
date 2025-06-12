@@ -1,8 +1,9 @@
-from gamedata.CropData import CROP_DATA
-from Variables import *
 import json
 
+from gamedata.CropData import CROP_DATA
+from Variables import *
 
+### VARIABLE PRESETS ###
 reloadInv = True
 zeroedItem = False
 
@@ -23,8 +24,6 @@ def save_inventory():
 def trigger_reload():
     global reloadInv
     reloadInv = True
-    save_inventory()
-    save_gold()    
 
 
 ### INDICATE RELOAD FINISHED ###
@@ -48,8 +47,6 @@ def change_inventory(action, item, count = 0):
             inventory[item] = count
         elif item in inventory:
             inventory[item] += count
-        else:
-            return "error.additem"
         
     elif action == "subtract":
         if item in inventory:
@@ -58,19 +55,11 @@ def change_inventory(action, item, count = 0):
                 if inventory[item] == 0:
                     inventory.pop(item)
                     zeroedItem = True
-                    return "item.zeroed"
-            elif inventory[item] < count:
-                return "error.subtractlarger"
-        else:
-            return "error.subtractitem"
     
     elif action == "remove":
         if item in inventory:
             inventory.pop(item)
             zeroedItem = True
-            return "item.zeroed"
-        else:
-            return "error.couldnotremoveitem"
     trigger_reload()
     return 'success'
 
@@ -127,6 +116,7 @@ def zeroed_item():
     else:
         return False
 
+# Indicate zeroing finished
 def zeroed_done():
     global zeroedItem
     

@@ -1,11 +1,13 @@
 import pygame
 
-
+### LOADING IMAGES ###
 def image_load(image_path):
     image = pygame.image.load('crops/' + image_path)
     image = pygame.transform.scale(image,[64,38])
     return image
 
+
+### CROP INFO ###
 CROP_DATA = {
     'carrot': {
         'growth_stages': [60,120,180],
