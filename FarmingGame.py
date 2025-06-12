@@ -420,7 +420,6 @@ while active:
         
         # Check for hover
         if invImg[i].collidepoint(pos):
-            
             screen.blit(hotbarSelected, [400 + i * 40, 760])
             
             # Redraw item and amount
@@ -430,9 +429,11 @@ while active:
             # Click checking for if another item has already been selected
             if holdingitem[2] == 2 and buttonsdown[0] and invImg[i].collidepoint(pos) and not invImg[holdingitem[3]].collidepoint(pos):
                 holdingitem = [True, inventory[i], 1, i]
+                shovel = False
             
             # Click checking (Only apply image once the button has been let go to eliminate issues with timing)
             else:
+                shovel = False
                 if buttonsdown[0] and holdingitem[2] == 0:
                     holdingitem[2] = 1
                 elif holdingitem[2] == 1 and not buttonsdown[0]:
