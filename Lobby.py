@@ -12,6 +12,11 @@ active = True
 pygame.init()
 size = (1200,800)
 screen = pygame.display.set_mode(size)
+pygame.display.set_caption("Sunrise Valley")
+
+### WINDOW ICON ###
+pygame_icon = pygame.image.load('images/gameicon.ico')
+pygame.display.set_icon(pygame_icon)
 
 
 ### SET FONT ###

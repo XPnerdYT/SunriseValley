@@ -13,6 +13,11 @@ from gamedata.FarmingGrid import farming_grid
 pygame.init()
 size = (1200,800)
 screen = pygame.display.set_mode(size)
+pygame.display.set_caption("Sunrise Valley")
+
+### WINDOW ICON ###
+pygame_icon = pygame.image.load('images/gameicon.ico')
+pygame.display.set_icon(pygame_icon)
 
 ### VARIABLE PRESETS ###
 itemamount = {}
@@ -59,7 +64,7 @@ def play_music():
     nextsong = random.choice(songs)    
     
     pygame.mixer.music.load(song)
-    pygame.mixer.music.set_volume(0) #0.5
+    pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play()
     pygame.mixer.music.queue(nextsong)
 
@@ -355,7 +360,7 @@ while active:
     for y in range(len(farming_grid)):
         for x in range(len(farming_grid[y])):
             cropImg = crop_growth(x,y,tick)
-            if cropImg != False:
+            if cropImg != None:
                 screen.blit(cropImg,(grid_hitboxes[y][x][:2]))
     
     
