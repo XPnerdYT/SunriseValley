@@ -270,6 +270,11 @@ def moving_bee():
     elif bee_pos[1] >= 700:
         bee_pos[1] = 699
         bee_direction[1] *= -1
+    bee_timer += 1
+    if bee_timer >= 60:
+        bee_direction = [random.randint(-1,1),random.randint(-1,1)]
+        bee_speed = [random.randint(1,4),random.randint(1,4)]
+        bee_timer = 0
         
     if bee_direction[0] > 0:
         screen.blit(beeR, bee_pos)
@@ -349,6 +354,7 @@ while active:
     moving_bee()
     ### CHECK SHOP OPEN STATUS, IF TRUE, SHOP IS RENDERED ###
     if shop_open:
+        shovel = False
         open_shop()    
     
     ### RELOAD IMAGES WHICH ARE ON TOP OF THE SHOP WHEN OPENED ###
