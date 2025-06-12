@@ -257,25 +257,24 @@ def moving_bee():
     bee_pos[1] += bee_direction[1] * bee_speed[1]
 
     #Keeping bee in set boundary
-    if bee_pos[0] <= 100 or bee_pos[0] >= 1100:
+    if bee_pos[0] <= 100: 
+        bee_pos[0] = 101
         bee_direction[0] *= -1
-    if bee_pos[1] <= 100 or bee_pos[1] >= 700:
+    elif bee_pos[0] >= 1100:
+        bee_pos[0] = 1099
+        bee_direction[0] *= -1
+    
+    if bee_pos[1] <= 100: 
+        bee_pos[1] = 101
         bee_direction[1] *= -1
-
-    #Random direction
-    bee_timer += 1
-    if bee_timer > 120:
-        bee_direction = [random.randint(-1,1), random.randint(-1,1)]
-        bee_speed = [random.randint(1,4), random.randint(1,4)]
-        bee_timer = 0
-
-    #Pick bee image direction
-    if bee_direction[0] >= 0:
-        bee_img = beeR
+    elif bee_pos[1] >= 700:
+        bee_pos[1] = 699
+        bee_direction[1] *= -1
+        
+    if bee_direction[0] > 0:
+        screen.blit(beeR, bee_pos)
     else:
-        bee_img = beeL
-
-    screen.blit(bee_img, bee_pos)
+        screen.blit(beeL, bee_pos)
 
 ### FARMING GRID HITBOXES ###
 grid_hitboxes = []
@@ -347,7 +346,7 @@ while active:
     screen.blit(farmingBG,[0,0])
     screen.blit(shovelimg,[0,180])
     backHB = screen.blit(backimg,[1130,20])
-    
+    moving_bee()
     ### CHECK SHOP OPEN STATUS, IF TRUE, SHOP IS RENDERED ###
     if shop_open:
         open_shop()    
@@ -394,14 +393,14 @@ while active:
                     if farming_grid[numY][numX] != "empty" and holdingitem[1] == None:
                         harvest_crop(numX, numY)
                         
-    moving_bee()
     
     #updating planted crops
     for y in range(len(farming_grid)):
         for x in range(len(farming_grid[y])):
             cropImg = crop_growth(x,y,tick)
-            if cropImg != None:
-                screen.blit(cropImg,(grid_hitboxes[y][x][:2]))
+            if not shop_open:
+                if cropImg != None:
+                    screen.blit(cropImg,(grid_hitboxes[y][x][:2]))
     
     
 
