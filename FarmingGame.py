@@ -145,8 +145,9 @@ def reload_hotbar():
 
 ### SHOP ###
 def open_shop():
+    
     # Globalize
-    global shopimg, screen, shopHB, pos, buttonsdown, hasBeenReleased, shopitems, shop_open, blurredBG, justOpened
+    global shopimg, screen, shopHB, pos, buttonsdown, shopitems, shop_open, blurredBG, justOpened, hasBeenReleased
     
     # Draw all images for the shop
     screen.blit(blurredBG,[0,0])
@@ -160,13 +161,8 @@ def open_shop():
             shopHB[i] = pygame.draw.rect(screen, BLACK, (250+i*136, 280, 130, 130), 1)
             shopHB[i+5] = pygame.draw.rect(screen, BLACK, (250+i*136, 510, 130, 130), 1)
     
-    # Item collision and buying
     for i, hitbox in shopHB.items():
-        
-        # If hovering
         if hitbox.collidepoint(pos):
-            
-            # Row height settings
             if i < 5: 
                 itemY = 280
                 itemN = i
@@ -174,20 +170,18 @@ def open_shop():
                 itemY = 510
                 itemN = i - 5
             
-            # Hover background
             pygame.draw.rect(screen, DARKYELLOW, (250+itemN*136, itemY, 130, 130))
             
-            # Once clicked, check gold amount then buy, then reload everything
             if buttonsdown[0]:
                 pygame.draw.rect(screen, DARKERYELLOW, (250+itemN*136, itemY, 130, 130))
-                hasBeenReleased = 1
-            elif not buttonsdown[0] and hasBeenReleased == 1:
-                if CROP_DATA[shopitems[i]]['seed_cost'] <= gold['gold']:
-                    hasBeenReleased = 0
-                    change_inventory("add", shopitems[i], 1)
-                    change_gold("subtract", CROP_DATA[shopitems[i]]['seed_cost'])
-                    reload_hotbar()
-        hasBeenReleased = 0
+                if hasBeenReleased == 0:
+                    if CROP_DATA[shopitems[i]]['seed_cost'] <= gold['gold']:
+                        change_inventory("add", shopitems[i], 1)
+                        change_gold("subtract", CROP_DATA[shopitems[i]]['seed_cost'])
+                        reload_hotbar()
+                    hasBeenReleased = 1
+            else:
+                hasBeenReleased = 0
     
     # Close button
     if close.collidepoint(pos) and buttonsdown[0]:
@@ -198,6 +192,7 @@ def open_shop():
     
     # Reset justOpened value since already opened
     justOpened = False
+    
 
 
 ### LOAD IMAGES ###
